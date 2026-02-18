@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forbice Estudios y Construcciones S.R.L.</title>
+    
+    <!-- Google Fonts: Montserrat & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'forbice-red': '#E5232B',
+                        'forbice-black': '#111111',
+                        'forbice-gray': '#F4F4F5', // Gris técnico zinc
+                        'forbice-dark-gray': '#1A1A1A',
+                    },
+                    fontFamily: {
+                        'display': ['Montserrat', 'sans-serif'],
+                        'body': ['Inter', 'sans-serif'],
+                    },
+                    spacing: {
+                        '128': '32rem',
+                    },
+                    transitionDuration: {
+                        '700': '700ms',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: #111111;
+        }
+        
+        h1, h2, h3, h4, h5, h6, .font-display {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* SHARP EDGES DOCTRINE: Kill all rounded corners */
+        * {
+            border-radius: 0 !important;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E5232B;
+        }
+
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 100%);
+        }
+        
+        /* Cinematic Image Hover Effect */
+        .cinematic-img {
+            filter: grayscale(100%) contrast(110%);
+            transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .group:hover .cinematic-img, .cinematic-img:hover {
+            filter: grayscale(0%) contrast(100%);
+            transform: scale(1.03);
+        }
+        
+        /* Hide scrollbar for carousel */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        [x-cloak] { display: none !important; }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Animación Logo Iso (Barras Rojas) */
+       /* ESTADO BASE: Sólido */
+        .iso-bar {
+            fill: #D90D2B;
+            fill-opacity: 1;
+            stroke: #D90D2B;
+            stroke-width: 0;
+            /* Transición suave para ir y volver */
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ESTADO HOVER: Se vuelve contorno y SE QUEDA ASÍ */
+        .group:hover .iso-bar {
+            fill-opacity: 0;    /* Transparente */
+            stroke-width: 4px;  /* Borde grueso */
+        }
+
+        /* SECUENCIA DE BARRIDO (Delay al entrar) */
+        .group:hover .iso-bar:nth-of-type(1) { transition-delay: 0.00s; }
+        .group:hover .iso-bar:nth-of-type(2) { transition-delay: 0.15s; }
+        .group:hover .iso-bar:nth-of-type(3) { transition-delay: 0.30s; }
+        .group:hover .iso-bar:nth-of-type(4) { transition-delay: 0.45s; }
+        .group:hover .iso-bar:nth-of-type(5) { transition-delay: 0.60s; }
+    </style>
+</head>
+<body class="antialiased selection:bg-forbice-red selection:text-white overflow-x-hidden" x-data="app()" @scroll.window="handleScroll()">
+
+    <!-- A. HEADER & NAVBAR -->
+    <!-- Added gradient overlay for constant legibility -->
+    <div class="fixed top-0 left-0 w-full h-32 bg-gradient-to-b from-black/90 to-transparent z-40 pointer-events-none transition-opacity duration-500" :class="scrolled ? 'opacity-0' : 'opacity-100'"></div>
+
+    <header 
+        class="fixed w-full top-0 z-50 transition-all duration-500 ease-out border-b border-transparent"
+        :class="{ 'bg-white/95 backdrop-blur-md py-4 shadow-sm border-gray-100 text-forbice-black': scrolled, 'bg-transparent py-8 text-white': !scrolled }"
+    >
+        <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
+            
+            <!-- Logo SVG -->
+            <a href="#" @click.prevent="scrollTo('top')" class="z-50 relative group block">
+                <svg class="h-10 md:h-12 w-auto" viewBox="0 0 500 143" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clip-path="url(#clip0_1_2)">
+        <path d="M194.09 113.91C192.78 113.91 191.58 113.69 190.47 113.26C189.37 112.83 188.41 112.21 187.6 111.42C186.79 110.63 186.16 109.7 185.7 108.64C185.24 107.58 185.01 106.41 185.01 105.13C185.01 103.85 185.24 102.69 185.7 101.62C186.16 100.56 186.8 99.63 187.61 98.84C188.43 98.05 189.39 97.43 190.49 97C191.59 96.57 192.8 96.35 194.1 96.35C195.4 96.35 196.64 96.58 197.77 97.02C198.89 97.47 199.84 98.14 200.62 99.02L199.03 100.57C198.38 99.88 197.64 99.37 196.82 99.04C196 98.71 195.13 98.54 194.2 98.54C193.27 98.54 192.34 98.7 191.52 99.03C190.69 99.36 189.98 99.82 189.37 100.4C188.77 100.99 188.3 101.69 187.96 102.5C187.63 103.31 187.46 104.19 187.46 105.13C187.46 106.07 187.63 106.96 187.96 107.77C188.29 108.58 188.76 109.28 189.37 109.87C189.97 110.46 190.69 110.92 191.52 111.24C192.34 111.57 193.24 111.73 194.2 111.73C195.16 111.73 196 111.56 196.82 111.23C197.64 110.9 198.37 110.38 199.03 109.67L200.62 111.21C199.84 112.09 198.88 112.76 197.77 113.22C196.65 113.68 195.42 113.91 194.08 113.91" fill="currentColor"/>
+        <path d="M216.91 113.91C215.6 113.91 214.39 113.69 213.27 113.25C212.15 112.81 211.18 112.19 210.37 111.4C209.55 110.61 208.91 109.68 208.46 108.62C208 107.56 207.77 106.4 207.77 105.14C207.77 103.88 208 102.72 208.46 101.66C208.92 100.6 209.56 99.67 210.37 98.88C211.19 98.09 212.15 97.47 213.26 97.03C214.37 96.59 215.59 96.37 216.91 96.37C218.23 96.37 219.42 96.59 220.53 97.02C221.63 97.45 222.6 98.07 223.42 98.86C224.24 99.65 224.88 100.58 225.33 101.64C225.78 102.7 226 103.87 226 105.15C226 106.43 225.78 107.59 225.33 108.66C224.88 109.72 224.24 110.65 223.42 111.44C222.59 112.23 221.63 112.85 220.53 113.28C219.43 113.71 218.22 113.93 216.91 113.93M216.91 111.75C217.86 111.75 218.74 111.59 219.54 111.26C220.34 110.93 221.05 110.47 221.65 109.87C222.25 109.27 222.71 108.58 223.05 107.77C223.39 106.97 223.55 106.1 223.55 105.15C223.55 104.2 223.38 103.33 223.05 102.53C222.72 101.73 222.25 101.03 221.65 100.43C221.05 99.83 220.35 99.37 219.54 99.04C218.73 98.71 217.85 98.55 216.91 98.55C215.97 98.55 215.06 98.71 214.25 99.04C213.44 99.37 212.73 99.83 212.13 100.43C211.53 101.03 211.06 101.72 210.72 102.53C210.39 103.33 210.22 104.2 210.22 105.15C210.22 106.1 210.39 106.97 210.72 107.77C211.06 108.57 211.53 109.27 212.13 109.87C212.73 110.47 213.44 110.93 214.25 111.26C215.06 111.59 215.95 111.75 216.91 111.75Z" fill="currentColor"/>
+        <path d="M235.88 113.71V96.56H237.89L249.24 110.65H248.18V96.56H250.63V113.71H248.62L237.28 99.62H238.33V113.71H235.88Z" fill="currentColor"/>
+        <path d="M266.91 113.91C265.6 113.91 264.35 113.71 263.16 113.31C261.97 112.91 261.03 112.39 260.34 111.75L261.25 109.84C261.9 110.41 262.74 110.89 263.75 111.26C264.76 111.64 265.82 111.82 266.91 111.82C267.91 111.82 268.71 111.71 269.34 111.48C269.96 111.25 270.42 110.94 270.71 110.54C271 110.14 271.15 109.69 271.15 109.18C271.15 108.59 270.96 108.12 270.57 107.76C270.19 107.4 269.69 107.11 269.08 106.89C268.47 106.67 267.79 106.48 267.06 106.31C266.33 106.14 265.59 105.95 264.84 105.73C264.1 105.51 263.42 105.23 262.81 104.88C262.2 104.54 261.7 104.08 261.33 103.49C260.95 102.91 260.77 102.16 260.77 101.25C260.77 100.34 261 99.55 261.47 98.81C261.94 98.07 262.65 97.47 263.63 97.02C264.6 96.57 265.84 96.35 267.34 96.35C268.34 96.35 269.32 96.48 270.31 96.74C271.29 97 272.14 97.38 272.86 97.87L272.05 99.83C271.31 99.34 270.54 98.99 269.72 98.76C268.9 98.54 268.11 98.43 267.34 98.43C266.38 98.43 265.58 98.55 264.96 98.8C264.34 99.04 263.89 99.37 263.6 99.78C263.31 100.19 263.17 100.65 263.17 101.15C263.17 101.75 263.36 102.24 263.75 102.6C264.13 102.96 264.63 103.25 265.24 103.46C265.85 103.67 266.53 103.86 267.26 104.04C267.99 104.21 268.74 104.4 269.48 104.62C270.22 104.83 270.9 105.11 271.51 105.45C272.12 105.79 272.62 106.25 272.99 106.82C273.37 107.39 273.55 108.13 273.55 109.03C273.55 109.93 273.31 110.7 272.84 111.44C272.37 112.18 271.63 112.78 270.65 113.23C269.66 113.68 268.42 113.9 266.91 113.9" fill="currentColor"/>
+        <path d="M286.42 113.71V98.69H280.54V96.56H294.73V98.69H288.85V113.71H286.42Z" fill="currentColor"/>
+        <path d="M303.53 113.71V96.55H310.22C312.44 96.55 314.19 97.08 315.46 98.13C316.73 99.18 317.37 100.65 317.37 102.53C317.37 103.77 317.08 104.84 316.51 105.73C315.94 106.62 315.12 107.3 314.06 107.78C313 108.26 311.72 108.49 310.21 108.49H304.87L305.97 107.36V113.71H303.52H303.53ZM305.98 107.61L304.88 106.41H310.15C311.72 106.41 312.91 106.07 313.72 105.39C314.53 104.71 314.93 103.76 314.93 102.53C314.93 101.3 314.53 100.36 313.72 99.69C312.91 99.02 311.72 98.68 310.15 98.68H304.88L305.98 97.45V107.6V107.61ZM315 113.71L310.64 107.48H313.26L317.67 113.71H315Z" fill="currentColor"/>
+        <path d="M334.58 113.91C332.32 113.91 330.55 113.27 329.26 111.97C327.97 110.68 327.32 108.79 327.32 106.31V96.55H329.77V106.21C329.77 108.12 330.19 109.52 331.03 110.4C331.87 111.28 333.06 111.72 334.6 111.72C336.14 111.72 337.35 111.28 338.19 110.4C339.03 109.52 339.45 108.12 339.45 106.21V96.55H341.83V106.31C341.83 108.79 341.19 110.68 339.91 111.97C338.63 113.26 336.85 113.91 334.58 113.91Z" fill="currentColor"/>
+        <path d="M360.66 113.91C359.35 113.91 358.15 113.69 357.04 113.26C355.94 112.83 354.98 112.21 354.17 111.42C353.36 110.63 352.73 109.7 352.27 108.64C351.81 107.58 351.58 106.41 351.58 105.13C351.58 103.85 351.81 102.69 352.27 101.62C352.73 100.56 353.37 99.63 354.18 98.84C355 98.05 355.96 97.43 357.06 97C358.16 96.57 359.37 96.35 360.67 96.35C361.97 96.35 363.21 96.58 364.33 97.02C365.45 97.47 366.4 98.14 367.18 99.02L365.59 100.57C364.94 99.88 364.2 99.37 363.38 99.04C362.56 98.71 361.69 98.54 360.76 98.54C359.83 98.54 358.9 98.7 358.08 99.03C357.25 99.36 356.54 99.82 355.93 100.4C355.33 100.99 354.86 101.69 354.52 102.5C354.19 103.31 354.02 104.19 354.02 105.13C354.02 106.07 354.19 106.96 354.52 107.77C354.85 108.58 355.32 109.28 355.93 109.87C356.53 110.46 357.25 110.92 358.08 111.24C358.9 111.57 359.8 111.73 360.76 111.73C361.72 111.73 362.56 111.56 363.38 111.23C364.2 110.9 364.93 110.38 365.59 109.67L367.18 111.21C366.4 112.09 365.44 112.76 364.33 113.22C363.21 113.68 361.98 113.91 360.64 113.91" fill="currentColor"/>
+        <path d="M383.41 113.91C382.1 113.91 380.9 113.69 379.79 113.26C378.69 112.83 377.73 112.21 376.92 111.42C376.11 110.63 375.48 109.7 375.02 108.64C374.56 107.58 374.33 106.41 374.33 105.13C374.33 103.85 374.56 102.69 375.02 101.62C375.48 100.56 376.12 99.63 376.93 98.84C377.75 98.05 378.71 97.43 379.81 97C380.91 96.57 382.12 96.35 383.42 96.35C384.72 96.35 385.96 96.58 387.08 97.02C388.2 97.47 389.15 98.14 389.93 99.02L388.34 100.57C387.69 99.88 386.95 99.37 386.13 99.04C385.31 98.71 384.44 98.54 383.51 98.54C382.58 98.54 381.65 98.7 380.83 99.03C380 99.36 379.29 99.82 378.68 100.4C378.08 100.99 377.61 101.69 377.27 102.5C376.94 103.31 376.77 104.19 376.77 105.13C376.77 106.07 376.94 106.96 377.27 107.77C377.6 108.58 378.07 109.28 378.68 109.87C379.28 110.46 380 110.92 380.83 111.24C381.65 111.57 382.55 111.73 383.51 111.73C384.47 111.73 385.31 111.56 386.13 111.23C386.95 110.9 387.68 110.38 388.34 109.67L389.93 111.21C389.15 112.09 388.19 112.76 387.08 113.22C385.96 113.68 384.73 113.91 383.39 113.91" fill="currentColor"/>
+        <path d="M401.79 96.56H399.34V113.72H401.79V96.56Z" fill="currentColor"/>
+        <path d="M420.81 113.91C419.5 113.91 418.29 113.69 417.17 113.25C416.05 112.81 415.08 112.19 414.27 111.4C413.45 110.61 412.81 109.68 412.36 108.62C411.9 107.56 411.67 106.4 411.67 105.14C411.67 103.88 411.9 102.72 412.36 101.66C412.82 100.6 413.46 99.67 414.27 98.88C415.09 98.09 416.05 97.47 417.16 97.03C418.27 96.59 419.49 96.37 420.81 96.37C422.13 96.37 423.32 96.59 424.43 97.02C425.53 97.45 426.5 98.07 427.32 98.86C428.14 99.65 428.78 100.58 429.23 101.64C429.68 102.7 429.9 103.87 429.9 105.15C429.9 106.43 429.68 107.59 429.23 108.66C428.78 109.72 428.14 110.65 427.32 111.44C426.49 112.23 425.53 112.85 424.43 113.28C423.33 113.71 422.12 113.93 420.81 113.93M420.81 111.75C421.76 111.75 422.64 111.59 423.44 111.26C424.25 110.93 424.95 110.47 425.55 109.87C426.15 109.27 426.61 108.58 426.95 107.77C427.29 106.97 427.45 106.1 427.45 105.15C427.45 104.2 427.28 103.33 426.95 102.53C426.62 101.73 426.15 101.03 425.55 100.43C424.95 99.83 424.25 99.37 423.44 99.04C422.63 98.71 421.75 98.55 420.81 98.55C419.87 98.55 418.96 98.71 418.15 99.04C417.34 99.37 416.63 99.83 416.03 100.43C415.43 101.03 414.96 101.72 414.62 102.53C414.28 103.33 414.12 104.2 414.12 105.15C414.12 106.1 414.29 106.97 414.62 107.77C414.96 108.57 415.42 109.27 416.03 109.87C416.63 110.47 417.34 110.93 418.15 111.26C418.96 111.59 419.85 111.75 420.81 111.75Z" fill="currentColor"/>
+        <path d="M439.78 113.71V96.56H441.79L453.14 110.65H452.08V96.56H454.53V113.71H452.52L441.18 99.62H442.23V113.71H439.78Z" fill="currentColor"/>
+        <path d="M465.81 113.71V96.55H477.92V98.68H468.26V111.57H478.26V113.7H465.81V113.71ZM468.04 103.95H476.86V106.03H468.04V103.95Z" fill="currentColor"/>
+        <path d="M493.36 113.91C492.05 113.91 490.8 113.71 489.61 113.31C488.42 112.91 487.48 112.39 486.79 111.75L487.7 109.84C488.35 110.41 489.19 110.89 490.2 111.26C491.21 111.64 492.27 111.82 493.36 111.82C494.36 111.82 495.16 111.71 495.79 111.48C496.41 111.25 496.87 110.94 497.16 110.54C497.45 110.14 497.6 109.69 497.6 109.18C497.6 108.59 497.41 108.12 497.02 107.76C496.64 107.4 496.14 107.11 495.53 106.89C494.92 106.67 494.24 106.48 493.51 106.31C492.78 106.14 492.04 105.95 491.29 105.73C490.55 105.51 489.87 105.23 489.26 104.88C488.65 104.54 488.15 104.08 487.78 103.49C487.4 102.91 487.22 102.16 487.22 101.25C487.22 100.34 487.45 99.55 487.92 98.81C488.39 98.07 489.1 97.47 490.08 97.02C491.05 96.57 492.29 96.35 493.79 96.35C494.79 96.35 495.77 96.48 496.76 96.74C497.74 97 498.59 97.38 499.31 97.87L498.5 99.83C497.76 99.34 496.99 98.99 496.17 98.76C495.35 98.54 494.56 98.43 493.79 98.43C492.83 98.43 492.03 98.55 491.41 98.8C490.79 99.04 490.34 99.37 490.05 99.78C489.76 100.19 489.62 100.65 489.62 101.15C489.62 101.75 489.81 102.24 490.2 102.6C490.58 102.96 491.08 103.25 491.69 103.46C492.3 103.67 492.98 103.86 493.71 104.04C494.44 104.21 495.19 104.4 495.93 104.62C496.67 104.83 497.35 105.11 497.96 105.45C498.57 105.79 499.07 106.25 499.44 106.82C499.82 107.39 500 108.13 500 109.03C500 109.93 499.76 110.7 499.29 111.44C498.82 112.18 498.08 112.78 497.1 113.23C496.11 113.68 494.87 113.9 493.36 113.9" fill="currentColor"/>
+        
+        <path class="iso-bar" d="M111.29 0H92.8V142.22H111.29V0Z" fill="#D90D2B"/>
+        <path class="iso-bar" d="M49.42 11.95H30.93V101.82H49.42V11.95Z" fill="#D90D2B"/>
+        <path class="iso-bar" d="M18.49 40.39H0V101.82H18.49V40.39Z" fill="#D90D2B"/>
+        <path class="iso-bar" d="M80.35 40.39H61.86V101.82H80.35V40.39Z" fill="#D90D2B"/>
+        <path class="iso-bar" d="M142.22 40.39H123.73V101.82H142.22V40.39Z" fill="#D90D2B"/>
+        
+        <path d="M185.02 74.89V26.64H221.48V35.6H196.19V74.89H185.02ZM195.36 48.35H218.52V57.31H195.36V48.35Z" fill="currentColor"/>
+        <path d="M252.02 75.71C248.2 75.71 244.68 75.09 241.44 73.85C238.2 72.61 235.4 70.86 233.03 68.61C230.66 66.36 228.83 63.72 227.52 60.68C226.21 57.65 225.56 54.34 225.56 50.75C225.56 47.16 226.21 43.86 227.52 40.82C228.83 37.79 230.68 35.15 233.07 32.89C235.46 30.64 238.26 28.89 241.48 27.65C244.7 26.41 248.19 25.79 251.96 25.79C255.73 25.79 259.28 26.41 262.47 27.65C265.66 28.89 268.44 30.64 270.81 32.89C273.18 35.14 275.03 37.77 276.36 40.78C277.69 43.79 278.36 47.11 278.36 50.74C278.36 54.37 277.69 57.64 276.36 60.7C275.03 63.76 273.18 66.4 270.81 68.63C268.44 70.86 265.66 72.59 262.47 73.83C259.27 75.07 255.8 75.69 252.03 75.69M251.96 66.18C254.12 66.18 256.11 65.81 257.92 65.08C259.73 64.35 261.33 63.29 262.71 61.91C264.09 60.53 265.16 58.9 265.92 57.02C266.68 55.14 267.06 53.05 267.06 50.75C267.06 48.45 266.68 46.36 265.92 44.48C265.16 42.6 264.1 40.96 262.75 39.59C261.4 38.21 259.8 37.16 257.96 36.42C256.12 35.69 254.12 35.32 251.96 35.32C249.8 35.32 247.81 35.69 246 36.42C244.18 37.16 242.59 38.21 241.21 39.59C239.83 40.97 238.76 42.6 238 44.48C237.24 46.37 236.86 48.45 236.86 50.75C236.86 53.05 237.24 55.08 238 56.99C238.76 58.9 239.82 60.54 241.17 61.92C242.53 63.3 244.12 64.36 245.96 65.09C247.8 65.83 249.8 66.19 251.96 66.19" fill="currentColor"/>
+        <path d="M286.75 74.89V26.64H307.36C314.07 26.64 319.28 28.19 323.01 31.29C326.73 34.39 328.59 38.68 328.59 44.15C328.59 47.73 327.74 50.83 326.04 53.42C324.34 56.02 321.93 58 318.8 59.38C315.68 60.76 311.95 61.45 307.63 61.45H292.95L297.91 56.56V74.89H286.74H286.75ZM297.92 57.8L292.96 52.56H307.02C310.47 52.56 313.04 51.82 314.74 50.32C316.44 48.83 317.29 46.77 317.29 44.15C317.29 41.53 316.44 39.42 314.74 37.95C313.04 36.48 310.47 35.74 307.02 35.74H292.96L297.92 30.43V57.79V57.8ZM317.43 74.89L305.37 57.38H317.29L329.49 74.89H317.43Z" fill="currentColor"/>
+        <path d="M337.41 74.89V26.64H360.98C367.05 26.64 371.6 27.79 374.66 30.09C377.72 32.39 379.24 35.42 379.24 39.19C379.24 41.72 378.62 43.91 377.38 45.77C376.14 47.63 374.44 49.07 372.28 50.08C370.12 51.09 367.64 51.6 364.83 51.6L366.14 48.77C369.17 48.77 371.86 49.26 374.2 50.25C376.54 51.24 378.37 52.7 379.68 54.63C380.99 56.56 381.64 58.93 381.64 61.73C381.64 65.87 380.01 69.09 376.75 71.41C373.49 73.73 368.68 74.89 362.34 74.89H337.39H337.41ZM348.51 66.48H361.54C364.44 66.48 366.63 66.01 368.12 65.07C369.61 64.13 370.36 62.62 370.36 60.56C370.36 58.5 369.61 57.03 368.12 56.05C366.63 55.07 364.43 54.57 361.54 54.57H347.69V46.44H359.61C362.32 46.44 364.4 45.97 365.85 45.03C367.3 44.09 368.02 42.65 368.02 40.72C368.02 38.79 367.3 37.42 365.85 36.48C364.4 35.54 362.32 35.07 359.61 35.07H348.51V66.5V66.48Z" fill="currentColor"/>
+        <path d="M401.31 26.64H390.14V74.89H401.31V26.64Z" fill="currentColor"/>
+        <path d="M435.83 75.71C432.11 75.71 428.65 75.1 425.46 73.88C422.27 72.66 419.5 70.93 417.16 68.68C414.82 66.43 412.99 63.79 411.68 60.75C410.37 57.72 409.72 54.39 409.72 50.76C409.72 47.13 410.37 43.8 411.68 40.77C412.99 37.74 414.83 35.1 417.19 32.84C419.56 30.59 422.33 28.85 425.49 27.64C428.66 26.42 432.13 25.81 435.9 25.81C440.08 25.81 443.86 26.53 447.24 27.98C450.62 29.43 453.45 31.55 455.75 34.36L448.58 40.98C446.93 39.1 445.09 37.68 443.07 36.74C441.05 35.8 438.84 35.33 436.45 35.33C434.2 35.33 432.13 35.7 430.25 36.43C428.37 37.17 426.73 38.22 425.36 39.6C423.98 40.98 422.91 42.61 422.16 44.49C421.4 46.38 421.02 48.46 421.02 50.76C421.02 53.06 421.4 55.15 422.16 57.03C422.92 58.91 423.99 60.54 425.36 61.92C426.74 63.3 428.37 64.36 430.25 65.09C432.13 65.83 434.2 66.19 436.45 66.19C438.84 66.19 441.04 65.72 443.07 64.78C445.09 63.84 446.93 62.4 448.58 60.47L455.75 67.09C453.45 69.89 450.62 72.03 447.24 73.5C443.86 74.97 440.06 75.7 435.83 75.7" fill="currentColor"/>
+        <path d="M462.64 74.89V26.64H499.1V35.6H473.74V65.93H500V74.89H462.64ZM472.91 46.08H496.14V54.76H472.91V46.08Z" fill="currentColor"/>
+    </g>
+    <defs>
+        <clipPath id="clip0_1_2">
+            <rect width="500" height="142.22" fill="white"/>
+        </clipPath>
+    </defs>
+</svg>
+            </a>
+
+            <!-- Desktop Menu -->
+            <nav class="hidden md:flex items-center space-x-8 lg:space-x-12">
+                <a href="#" @click.prevent="scrollTo('historia')" class="uppercase text-xs tracking-[0.2em] font-bold hover:text-forbice-red transition-colors duration-300" :class="scrolled ? 'text-forbice-black' : 'text-white'">Historia</a>
+                <a href="#" @click.prevent="scrollTo('equipo')" class="uppercase text-xs tracking-[0.2em] font-bold hover:text-forbice-red transition-colors duration-300" :class="scrolled ? 'text-forbice-black' : 'text-white'">Equipo</a>
+                <a href="#" @click.prevent="scrollTo('obras')" class="uppercase text-xs tracking-[0.2em] font-bold hover:text-forbice-red transition-colors duration-300" :class="scrolled ? 'text-forbice-black' : 'text-white'">Obras</a>
+                <a href="#" @click.prevent="scrollTo('inversion')" class="uppercase text-xs tracking-[0.2em] font-bold hover:text-forbice-red transition-colors duration-300" :class="scrolled ? 'text-forbice-black' : 'text-white'">Inversión</a>
+                <a href="#" @click.prevent="scrollTo('contacto')" class="uppercase text-xs tracking-[0.2em] font-bold text-forbice-red hover:text-white hover:bg-forbice-red transition-all duration-300 border border-forbice-red px-6 py-2">Contacto</a>
+            </nav>
+
+            <!-- Hamburger Button -->
+            <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden z-50 focus:outline-none p-2 group">
+                <div class="space-y-1.5">
+                    <span class="block w-8 h-0.5 bg-current transition-all duration-300 group-hover:w-6 ml-auto" :class="mobileMenuOpen ? 'rotate-45 translate-y-2 bg-forbice-black' : (scrolled ? 'bg-forbice-black' : 'bg-white')"></span>
+                    <span class="block w-8 h-0.5 bg-current transition-all duration-300" :class="mobileMenuOpen ? 'opacity-0' : (scrolled ? 'bg-forbice-black' : 'bg-white')"></span>
+                    <span class="block w-8 h-0.5 bg-current transition-all duration-300 group-hover:w-4 ml-auto" :class="mobileMenuOpen ? '-rotate-45 -translate-y-2 bg-forbice-black' : (scrolled ? 'bg-forbice-black' : 'bg-white')"></span>
+                </div>
+            </button>
+        </div>
+
+        <!-- Mobile Menu (Fullscreen Overlay) -->
+        <div x-show="mobileMenuOpen" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-full"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 translate-y-full"
+             class="fixed inset-0 z-[60] bg-white flex flex-col items-center justify-center space-y-8 h-[100dvh] w-full">
+            
+            <button @click="mobileMenuOpen = false" class="absolute top-6 right-6 p-2 text-forbice-black">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <a href="#" @click.prevent="scrollTo('historia')" class="text-4xl font-display font-black uppercase tracking-tight text-forbice-black hover:text-forbice-red transition-colors">HISTORIA</a>
+            <a href="#" @click.prevent="scrollTo('equipo')" class="text-4xl font-display font-black uppercase tracking-tight text-forbice-black hover:text-forbice-red transition-colors">EQUIPO</a>
+            <a href="#" @click.prevent="scrollTo('obras')" class="text-4xl font-display font-black uppercase tracking-tight text-forbice-black hover:text-forbice-red transition-colors">OBRAS</a>
+            <a href="#" @click.prevent="scrollTo('inversion')" class="text-4xl font-display font-black uppercase tracking-tight text-forbice-black hover:text-forbice-red transition-colors">INVERSIÓN</a>
+            <a href="#" @click.prevent="scrollTo('contacto')" class="text-4xl font-display font-black uppercase tracking-tight text-forbice-black hover:text-forbice-red transition-colors">CONTACTO</a>
+        </div>
+    </header>
+
+    <!-- Hero Section (Top) -->
+    <div id="top"></div>
+
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-forbice-black pb-20">
+        <!-- Background -->
+        <div class="absolute inset-0 z-0">
+            <video autoplay loop muted playsinline poster="https://raw.githubusercontent.com/forbice/fotos/aced625e636a6dc46885962bd945d14b056af484/fotograma-1.jpg" class="absolute inset-0 w-full h-full object-cover">
+                <source src="https://raw.githubusercontent.com/forbice/fotos/refs/heads/main/video_forbice.mp4" type="video/mp4">
+            </video>
+            <div class="absolute inset-0 bg-black/30"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
+        </div>
+
+        <div class="relative z-10 container mx-auto px-6 text-center md:text-left pt-32">
+            <h1 class="text-white font-display font-black text-5xl md:text-7xl lg:text-8xl leading-none tracking-tighter uppercase mb-6">
+                ESPACIOS<br>CON SENTIDO.
+            </h1>
+            
+            <div class="flex flex-col md:flex-row items-center gap-8 mt-12 md:ml-2">
+                <p class="text-gray-300 text-lg max-w-lg font-light leading-relaxed text-center md:text-left border-l-2 border-forbice-red pl-6">
+                    Donde la estructura potencia el diseño. 
+                    Proyectamos desarrollos que trascienden la estética para garantizar solidez y calidad de vida real.
+                </p>
+                <a href="#" @click.prevent="scrollTo('obras')" class="group relative px-8 py-4 bg-transparent border border-white text-white font-bold uppercase tracking-widest overflow-hidden transition-all hover:border-transparent">
+                    <span class="relative z-10 group-hover:text-black transition-colors duration-300">Ver Obras</span>
+                    <div class="absolute inset-0 bg-white transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-in-out"></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- B. HISTORIA (Asymmetric Editorial Layout - REFAC: Grid Structure & Alignment) -->
+    <section id="historia" class="py-32 bg-white relative min-h-screen flex items-center">
+        <div class="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-[auto_1fr] gap-x-24 gap-y-16 items-start">
+            
+            <div class="order-1 lg:col-start-1 lg:row-start-1">
+                <div class="flex items-center space-x-4 mb-8">
+                    <div class="w-12 h-[2px] bg-forbice-red"></div>
+                    <span class="text-forbice-black font-bold uppercase tracking-[0.3em] text-xs">Nuestra Esencia</span>
+                </div>
+                
+                <h3 class="text-5xl md:text-6xl font-display font-black text-forbice-black mb-8 uppercase leading-none tracking-tight">
+                    Legado en<br>Evolución.
+                </h3>
+                <p class="text-xl text-gray-600 leading-loose mb-10 font-light">
+                    Desde 1993, Forbice es sinónimo de solvencia técnica en Jujuy. Lo que inició como un estudio de ingeniería de detalle se consolidó como una desarrolladora capaz de ejecutar lo complejo. Construimos sobre la base inamovible de tres décadas de experiencia comprobable.
+                </p>
+                
+                <div class="bg-forbice-gray p-6 border-l-4 border-forbice-black inline-block">
+                    <p class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">Base Operativa</p>
+                    <p class="text-lg font-display font-bold text-forbice-black">San Salvador de Jujuy</p>
+                </div>
+            </div>
+
+            <div class="order-2 lg:col-start-2 lg:row-start-1 lg:row-span-2 relative border-l-2 border-gray-200 pl-8 md:pl-12 py-2 space-y-24 md:space-y-32 flex flex-col justify-between" x-data="{ hoveredYear: null }">
+                
+                <div class="relative group cursor-default transition-opacity duration-300"
+                     @mouseenter="hoveredYear = 1993" @mouseleave="hoveredYear = null"
+                     :class="{'opacity-40': hoveredYear && hoveredYear !== 1993}">
+                    <div class="absolute -left-[37px] md:-left-[54px] top-3 w-3 h-3 bg-black rounded-none transition-transform duration-300 group-hover:scale-150 group-hover:bg-forbice-red"></div>
+                    <h4 class="text-4xl font-display font-black text-gray-300 group-hover:text-forbice-black transition-colors duration-300">1993</h4>
+                    <p class="text-xs font-bold uppercase tracking-wider text-forbice-red mb-1">La Fundación</p>
+                    <p class="text-sm text-gray-600 max-w-sm">Inicio de operaciones centradas en cálculo estructural.</p>
+                </div>
+
+                <div class="relative group cursor-default transition-opacity duration-300"
+                     @mouseenter="hoveredYear = 2005" @mouseleave="hoveredYear = null"
+                     :class="{'opacity-40': hoveredYear && hoveredYear !== 2005}">
+                    <div class="absolute -left-[37px] md:-left-[54px] top-3 w-3 h-3 bg-black rounded-none transition-transform duration-300 group-hover:scale-150 group-hover:bg-forbice-red"></div>
+                    <h4 class="text-4xl font-display font-black text-gray-300 group-hover:text-forbice-black transition-colors duration-300">2005</h4>
+                    <p class="text-xs font-bold uppercase tracking-wider text-forbice-red mb-1">Resiliencia</p>
+                    <p class="text-sm text-gray-600 max-w-sm">Integración familiar en la gestión operativa.</p>
+                </div>
+
+                <div class="relative group cursor-default transition-opacity duration-300"
+                     @mouseenter="hoveredYear = 2012" @mouseleave="hoveredYear = null"
+                     :class="{'opacity-40': hoveredYear && hoveredYear !== 2012}">
+                    <div class="absolute -left-[37px] md:-left-[54px] top-3 w-3 h-3 bg-black rounded-none transition-transform duration-300 group-hover:scale-150 group-hover:bg-forbice-red"></div>
+                    <h4 class="text-4xl font-display font-black text-gray-300 group-hover:text-forbice-black transition-colors duration-300">2012</h4>
+                    <p class="text-xs font-bold uppercase tracking-wider text-forbice-red mb-1">Consolidación</p>
+                    <p class="text-sm text-gray-600 max-w-sm">Profesionalización de la estructura corporativa S.R.L.</p>
+                </div>
+
+                <div class="relative group cursor-default transition-opacity duration-300"
+                     @mouseenter="hoveredYear = 2021" @mouseleave="hoveredYear = null"
+                     :class="{'opacity-40': hoveredYear && hoveredYear !== 2021}">
+                    <div class="absolute -left-[37px] md:-left-[54px] top-3 w-3 h-3 bg-black rounded-none transition-transform duration-300 group-hover:scale-150 group-hover:bg-forbice-red"></div>
+                    <h4 class="text-4xl font-display font-black text-gray-300 group-hover:text-forbice-black transition-colors duration-300">2021</h4>
+                    <p class="text-xs font-bold uppercase tracking-wider text-forbice-red mb-1">Logística Extrema</p>
+                    <p class="text-sm text-gray-600 max-w-sm">Operaciones complejas a +3.500 msnm.</p>
+                </div>
+
+                 <div class="relative group cursor-default transition-opacity duration-300"
+                     @mouseenter="hoveredYear = 2025" @mouseleave="hoveredYear = null"
+                     :class="{'opacity-40': hoveredYear && hoveredYear !== 2025}">
+                    <div class="absolute -left-[37px] md:-left-[54px] top-3 w-3 h-3 bg-forbice-red rounded-none ring-4 ring-red-50 transition-transform duration-300 group-hover:scale-150"></div>
+                    <h4 class="text-4xl font-display font-black text-forbice-black transition-colors duration-300">2025</h4>
+                    <p class="text-xs font-bold uppercase tracking-wider text-forbice-red mb-1">Desarrolladora</p>
+                    <p class="text-sm text-gray-600 max-w-sm">Gestión integral: Inversión + Diseño + Obra.</p>
+                </div>
+            </div>
+
+            <div class="order-3 lg:col-start-1 lg:row-start-2 lg:self-end mt-16 lg:mt-0 flex justify-center lg:justify-start lg:pb-2">
+                 <button @click="historyOpen = true" class="group relative flex items-center justify-center lg:justify-start text-forbice-black font-bold uppercase tracking-widest text-sm hover:text-forbice-red transition-colors border border-black px-8 py-4 hover:bg-black hover:text-white overflow-visible w-full md:w-auto">
+                    Leer Historia Completa
+                    
+                    <div class="hidden lg:block absolute left-full top-1/2 h-[1px] bg-forbice-red transition-all duration-700 ease-out origin-left w-0 group-hover:w-[30vw] pointer-events-none"></div>
+                    
+                    <svg class="lg:hidden ml-3 w-4 h-4 text-forbice-red transform group-hover:translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SLIDE-OVER PANEL: HISTORIA (LEFT SLIDE) -->
+    <div x-show="historyOpen" class="fixed inset-0 z-[100] overflow-hidden" x-cloak>
+        <!-- Overlay -->
+        <div 
+            class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-500" 
+            x-show="historyOpen"
+            x-transition:enter="ease-out duration-500"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="ease-in duration-500"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            @click="historyOpen = false">
+        </div>
+
+        <!-- Panel -->
+        <div 
+            class="absolute left-0 top-0 bottom-0 w-full md:w-1/2 bg-white shadow-2xl overflow-y-auto transform transition-transform duration-500 ease-in-out"
+            x-show="historyOpen"
+            x-transition:enter="-translate-x-full"
+            x-transition:enter-start="-translate-x-full"
+            x-transition:enter-end="translate-x-0"
+            x-transition:leave="-translate-x-full"
+            x-transition:leave-start="translate-x-0"
+            x-transition:leave-end="-translate-x-full">
+            
+            <button @click="historyOpen = false" class="absolute top-6 right-6 p-2 text-forbice-black hover:rotate-90 transition-transform duration-300 z-50">
+                <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <!-- IMAGE SECTION -->
+            <div @click="founderOpen = true" class="relative cursor-pointer group overflow-hidden h-80 w-full">
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/></svg>
+                </div>
+                <img src="https://raw.githubusercontent.com/fapydg/forbice-data/a192575a7d4dc6f9c44829513d73cd62ad8b3216/assets/images/laempresa-fund.jpg" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-in-out group-hover:scale-105" alt="Rodolfo Forbice">
+            </div>
+
+            <div class="container mx-auto px-6 py-24 max-w-4xl pr-8 md:pr-32">
+                
+                <div class="mb-20 border-b-2 border-black pb-12">
+                    <h2 class="text-5xl md:text-7xl font-display font-black text-forbice-black uppercase tracking-tighter mb-8">Trayectoria</h2>
+                    <blockquote class="text-xl md:text-2xl text-gray-600 font-light italic border-l-4 border-forbice-red pl-6 py-2">
+                        "Él fue el iniciador de este sueño [...] Siempre presente con sus enseñanzas y su trayectoria, puso todo su empeño en lograr la excelencia. Esperamos siempre estar a su altura."
+                    </blockquote>
+                </div>
+                
+                <div class="relative border-l-2 border-gray-200 ml-4 md:ml-6 space-y-20">
+                    <div class="relative pl-12">
+                        <div class="absolute -left-[9px] top-2 w-4 h-4 bg-forbice-black rounded-full ring-4 ring-white"></div>
+                        <h3 class="text-4xl font-display font-black text-forbice-black mb-2">1993</h3>
+                        <h4 class="text-sm font-bold uppercase tracking-widest text-forbice-red mb-4">El Origen</h4>
+                        <p class="text-lg text-gray-700 leading-relaxed">
+                            La empresa nace bajo la visión del Ing. Rodolfo O. F. Forbice, centrada obsesivamente en el cálculo estructural. En un mercado de construcción tradicional, Forbice se diferenció por la precisión matemática y la seguridad sísmica. El nombre se convirtió en sinónimo de garantía técnica absoluta.
+                        </p>
+                    </div>
+
+                    <div class="relative pl-12">
+                        <div class="absolute -left-[9px] top-2 w-4 h-4 bg-gray-300 rounded-full ring-4 ring-white"></div>
+                        <h3 class="text-4xl font-display font-black text-gray-400 mb-2">2005</h3>
+                        <h4 class="text-sm font-bold uppercase tracking-widest text-forbice-red mb-4">Resiliencia y Oficio</h4>
+                        <p class="text-lg text-gray-700 leading-relaxed">
+                            Ante desafíos de salud del fundador, la familia activó una reestructuración profunda. La segunda generación no entró por la oficina, sino por la obra, aprendiendo el oficio desde los cimientos. Fue la etapa de curtir el carácter de la empresa en el terreno.
+                        </p>
+                    </div>
+
+                    <div class="relative pl-12">
+                        <div class="absolute -left-[9px] top-2 w-4 h-4 bg-gray-300 rounded-full ring-4 ring-white"></div>
+                        <h3 class="text-4xl font-display font-black text-gray-400 mb-2">2012</h3>
+                        <h4 class="text-sm font-bold uppercase tracking-widest text-forbice-red mb-4">Consolidación Corporativa</h4>
+                        <p class="text-lg text-gray-700 leading-relaxed">
+                            Se formaliza la estructura S.R.L. bajo la gestión de Pablo, Rodolfo y Rolando Forbice. La empresa evoluciona de una estructura personalista a una corporación ágil, incorporando procesos de gestión modernos para encarar obras de infraestructura a gran escala.
+                        </p>
+                    </div>
+
+                    <div class="relative pl-12">
+                        <div class="absolute -left-[9px] top-2 w-4 h-4 bg-gray-300 rounded-full ring-4 ring-white"></div>
+                        <h3 class="text-4xl font-display font-black text-gray-400 mb-2">2021</h3>
+                        <h4 class="text-sm font-bold uppercase tracking-widest text-forbice-red mb-4">Logística Extrema</h4>
+                        <p class="text-lg text-gray-700 leading-relaxed">
+                            Un punto de inflexión operativo. La ejecución simultánea de escuelas en Alta Montaña (+3.500 msnm) puso a prueba y validó nuestra capacidad logística. Campamentos propios, amplitudes térmicas extremas y cumplimiento de plazos en condiciones adversas.
+                        </p>
+                    </div>
+
+                    <div class="relative pl-12">
+                        <div class="absolute -left-[9px] top-2 w-4 h-4 bg-forbice-red rounded-full ring-4 ring-red-100 animate-pulse"></div>
+                        <h3 class="text-4xl font-display font-black text-forbice-black mb-2">Actualidad</h3>
+                        <h4 class="text-sm font-bold uppercase tracking-widest text-forbice-red mb-4">Escala Urbana & Diseño</h4>
+                        <p class="text-lg text-gray-700 leading-relaxed">
+                            Con la visión arquitectónica de la tercera generación (Arq. Felipe Forbice), la firma da el salto a Desarrolladora Integral. Proyectos como 'Torres de Luján' (PPP) marcan una nueva era de diseño premium y gestión de inversiones a escala urbana.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-24 text-center">
+                    <button @click="historyOpen = false" class="px-8 py-3 border border-black text-xs font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors">Volver</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- C. EQUIPO (Smart Tags & Human-Centric) -->
+    <section id="equipo" class="bg-white pt-24 pb-0">
+        
+        <div class="container mx-auto px-6">
+            <div class="mb-16 md:w-2/3">
+                <h2 class="text-6xl md:text-8xl font-display font-black text-forbice-black uppercase tracking-tighter">EQUIPO</h2>
+            </div>
+        </div>
+
+                <div class="flex flex-col md:flex-row min-h-[600px] md:h-[85vh] w-full">
+                    
+                    <div class="group relative w-full md:w-1/2 h-full min-h-[600px] overflow-hidden bg-forbice-gray cursor-default border-r border-white/10">
+                        <div class="absolute inset-0 z-0">
+                            <img src="https://raw.githubusercontent.com/forbice/fotos/aced625e636a6dc46885962bd945d14b056af484/FEYC_2.JPG" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                        
+                        <div class="absolute bottom-0 left-0 w-full z-10 bg-white/95 backdrop-blur-md px-8 md:px-12 py-10 pb-24 transition-transform duration-500 ease-in-out transform translate-y-[calc(100%-140px)] group-hover:translate-y-0 border-t-4 border-forbice-red">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-3xl lg:text-4xl font-display font-black text-forbice-black uppercase tracking-tighter mix-blend-multiply break-words hyphens-auto">Forbice<br>Construcciones</h3>
+                                <svg class="w-8 h-8 text-forbice-red transform group-hover:-rotate-180 transition-transform duration-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                            </div>
+                            
+                            <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                                <p class="text-gray-600 font-medium mb-4">Ejecución técnica y logística de precisión.</p>
+                                <ul class="space-y-2 text-forbice-black text-sm mb-8">
+                                    <li class="flex items-center"><span class="w-1.5 h-1.5 bg-forbice-red mr-3"></span> Obra Pública</li>
+                                    <li class="flex items-center"><span class="w-1.5 h-1.5 bg-forbice-red mr-3"></span> Logística de Alta Montaña</li>
+                                    <li class="flex items-center"><span class="w-1.5 h-1.5 bg-forbice-red mr-3"></span> Ingeniería Civil y Fundaciones</li>
+                                </ul>
+                                <button @click="constructionOpen = true" class="w-full bg-forbice-black text-white py-4 uppercase font-bold tracking-widest text-xs hover:bg-forbice-red transition-colors">Conocer</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="group relative w-full md:w-1/2 h-full min-h-[600px] overflow-hidden bg-forbice-black cursor-default">
+                        <div class="absolute inset-0 z-0">
+                            <img src="https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/arqdisrender.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                        
+                        <div class="absolute bottom-0 left-0 w-full z-10 bg-forbice-black/95 backdrop-blur-md px-8 md:px-12 py-10 pb-24 transition-transform duration-500 ease-in-out transform translate-y-[calc(100%-140px)] group-hover:translate-y-0 border-t-4 border-white">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-3xl lg:text-4xl font-display font-black text-white uppercase tracking-tighter break-words hyphens-auto">Forbice<br>Arq+Dis</h3>
+                                <svg class="w-8 h-8 text-white transform group-hover:-rotate-180 transition-transform duration-500 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                            </div>
+
+                            <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                                <p class="text-gray-400 font-medium mb-4">Diseño, interiorismo y experiencia de usuario.</p>
+                                <ul class="space-y-2 text-gray-300 text-sm mb-8">
+                                    <li class="flex items-center"><span class="w-1.5 h-1.5 bg-white mr-3"></span> Proyectos de autor</li>
+                                    <li class="flex items-center"><span class="w-1.5 h-1.5 bg-white mr-3"></span> Interiorismo</li>
+                                    <li class="flex items-center"><span class="w-1.5 h-1.5 bg-white mr-3"></span> Diseño Bioclimático</li>
+                                </ul>
+                                <button @click="designOpen = true" class="w-full bg-white text-forbice-black py-4 uppercase font-bold tracking-widest text-xs hover:bg-gray-200 transition-colors">Conocer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+        <div x-show="founderOpen" class="fixed inset-0 z-[200] bg-black/95 flex items-center justify-center p-4 cursor-zoom-out"
+             x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+             x-cloak @click="founderOpen = false">
+            <div class="relative max-h-screen w-full flex flex-col items-center justify-center">
+                <img src="https://raw.githubusercontent.com/fapydg/forbice-data/a192575a7d4dc6f9c44829513d73cd62ad8b3216/assets/images/laempresa-fund.jpg" class="max-h-[85vh] w-auto shadow-2xl rounded-sm object-contain"
+                     x-show="founderOpen"
+                     x-transition:enter="transition ease-out duration-700 delay-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
+                <div class="mt-6 text-center">
+                    <h3 class="text-white text-2xl font-display font-bold uppercase tracking-widest">Ing. Rodolfo Oreste Felipe Forbice</h3>
+                    <div class="w-12 h-1 bg-forbice-red mx-auto my-3"></div>
+                    <p class="text-white/60 font-light italic">Fundador</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SIDE PANEL: CONSTRUCCIONES (LEFT SLIDE) -->
+    <div x-show="constructionOpen" class="fixed inset-0 z-[100] overflow-hidden" x-cloak>
+        <div class="absolute inset-0 bg-forbice-black/90 backdrop-blur-sm transition-opacity duration-500" 
+            x-show="constructionOpen" x-transition:enter="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="opacity-0" @click="constructionOpen = false"></div>
+
+        <div class="absolute left-0 top-0 bottom-0 w-full bg-white shadow-2xl transform transition-transform duration-500 ease-in-out flex flex-col h-full overflow-hidden"
+            x-show="constructionOpen" x-transition:enter="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="-translate-x-full">
+            
+            <button @click="constructionOpen = false" class="absolute top-6 right-6 z-50 group cursor-pointer drop-shadow-md flex items-center gap-2">
+                <span class="text-white font-bold uppercase tracking-widest text-xs hidden md:block opacity-80 group-hover:opacity-100 transition-opacity">Cerrar</span>
+                <svg class="h-8 w-8 text-white transform group-hover:rotate-90 transition-transform duration-300 drop-shadow-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+
+            <div class="flex flex-col lg:flex-row h-full">
+                <div class="lg:w-2/5 flex flex-col bg-forbice-gray border-r border-gray-200 relative shrink-0 order-2 lg:order-1 h-full overflow-y-auto custom-scrollbar pb-40 md:pb-12">
+                    <div class="p-8 md:p-12 lg:p-16 flex flex-col min-h-max pb-48 lg:pb-16">
+                        <div class="mb-10">
+                            <span class="text-forbice-red font-bold uppercase tracking-[0.2em] text-xs mb-4 block">Infraestructura & Desarrollo</span>
+                            <h2 class="font-display font-black text-3xl md:text-5xl lg:text-6xl text-forbice-black uppercase leading-none mb-6">Motor<br>Económico.</h2>
+                            
+                            <div class="relative pl-6 border-l-4 border-forbice-red">
+                                <p class="text-sm md:text-base text-gray-600 leading-relaxed italic">"Somos una PYME de una provincia del interior, una herramienta del Estado. A lo largo de nuestra actividad generamos un impacto económico positivo, no solo en empleo directo, sino en todo lo que derrama la construcción."</p>
+                                <p class="mt-2 text-xs font-bold uppercase tracking-widest text-forbice-black">— Pablo Forbice</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-12 border-t border-gray-300 pt-10">
+                            <div class="group"><h4 class="text-base font-bold text-forbice-black uppercase tracking-wide">Arq. Pablo Guillermo Forbice</h4><p class="text-xs text-forbice-red font-bold uppercase tracking-wider mb-3 mt-1">Socio Gerente | Arquitectura</p><p class="text-sm text-gray-600 leading-relaxed">Visión estratégica y desarrollo de negocios. Planificación arquitectónica y coordinación integral de equipos de trabajo.</p></div>
+                            <div class="group"><h4 class="text-base font-bold text-forbice-black uppercase tracking-wide">Rolando Fabián Forbice</h4><p class="text-xs text-forbice-red font-bold uppercase tracking-wider mb-3 mt-1">Socio Gerente | Gerencia Operativa</p><p class="text-sm text-gray-600 leading-relaxed">Dirección de logística y recursos. Gestión administrativa y control de ejecución en obras de alta complejidad.</p></div>
+                            <div class="group"><h4 class="text-base font-bold text-forbice-black uppercase tracking-wide">Ing. Rodolfo Fabrizio Forbice</h4><p class="text-xs text-forbice-red font-bold uppercase tracking-wider mb-3 mt-1">Ingeniería Civil</p><p class="text-sm text-gray-600 leading-relaxed">Responsable de estructura sismorresistente e instalaciones complejas. Cálculo y solvencia técnica.</p></div>
+                            <div class="group"><h4 class="text-base font-bold text-forbice-black uppercase tracking-wide">Abog. Fabrizio Forbice</h4><p class="text-xs text-forbice-red font-bold uppercase tracking-wider mb-3 mt-1">Asesoría Legal</p><p class="text-sm text-gray-600 leading-relaxed">Gestión contractual y vínculos con terceros. Seguridad jurídica y normativa.</p></div>
+                        </div>
+                        
+                        <div class="mt-16 pt-8 border-t border-gray-200"><p class="text-xs text-gray-400 uppercase tracking-widest font-bold">32 Años de Trayectoria Ininterrumpida</p></div>
+                    </div>
+                </div>
+                
+                <div class="w-full lg:w-3/5 h-[40vh] lg:h-full bg-black relative shrink-0 order-1 lg:order-2 group/slider" 
+                     x-data="{ active: 0, slides: [
+                        { img: 'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/IMG_20231011_125433989_HDR.jpg', title: 'OBRA PÚBLICA', desc: 'Ejecución de escuelas y edificios gubernamentales.' },
+                        { img: 'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/FEYC_1.jpg', title: 'INGENIERÍA CIVIL', desc: 'Cálculo estructural y fundaciones complejas.' },
+                        { img: 'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/IMG_20250627_165027.jpg', title: 'CAPACIDAD OPERATIVA', desc: 'Planificación estratégica y despliegue logístico en escenarios de máxima complejidad.' },
+                        { img: 'https://raw.githubusercontent.com/forbice/fotos/aced625e636a6dc46885962bd945d14b056af484/FEYC_2.JPG', title: 'DIRECCIÓN TÉCNICA', desc: 'Interpretación precisa y resolución constructiva desde la génesis del proyecto.' }
+                     ]}">
+                    
+                    <template x-for="(slide, index) in slides" :key="index">
+                        <div x-show="active === index" class="absolute inset-0 transition-opacity duration-700 ease-in-out cursor-pointer" @click="openLightbox(slide.img, slides.map(s => s.img), index)">
+                            <img :src="slide.img" class="w-full h-full object-cover opacity-90">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                            
+                            <div class="absolute bottom-0 left-0 w-full p-6 md:p-12 lg:p-16 pointer-events-none">
+                                <p class="text-forbice-red font-bold uppercase tracking-widest text-xs mb-2" x-text="'0' + (index + 1) + ' / 0' + slides.length"></p>
+                                <h3 class="text-2xl lg:text-3xl font-display font-bold text-white uppercase mb-2" x-text="slide.title"></h3>
+                                <p class="text-gray-300 max-w-md text-sm lg:text-base leading-relaxed hidden md:block" x-text="slide.desc"></p>
+                            </div>
+                        </div>
+                    </template>
+
+                    <div class="absolute bottom-6 right-6 lg:bottom-12 lg:right-12 flex space-x-2 z-20">
+                        <button @click.stop="active = active === 0 ? slides.length - 1 : active - 1" class="p-3 lg:p-4 border border-white/20 text-white hover:bg-white hover:text-black transition-colors bg-black/20 lg:bg-transparent"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+                        <button @click.stop="active = active === slides.length - 1 ? 0 : active + 1" class="p-3 lg:p-4 border border-white/20 text-white hover:bg-white hover:text-black transition-colors bg-black/20 lg:bg-transparent"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDE PANEL: ARQ+DIS (RIGHT SLIDE) -->
+    <div x-show="designOpen" class="fixed inset-0 z-[100] overflow-hidden" x-cloak>
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-sm transition-opacity duration-500" 
+            x-show="designOpen" x-transition:enter="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="opacity-0" @click="designOpen = false"></div>
+
+        <div class="absolute right-0 top-0 bottom-0 w-full bg-forbice-dark-gray shadow-2xl transform transition-transform duration-500 ease-in-out flex flex-col h-full overflow-hidden"
+            x-show="designOpen" x-transition:enter="translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="translate-x-full">
+            
+            <button @click="designOpen = false" class="absolute top-6 left-6 z-50 flex items-center gap-2 group cursor-pointer drop-shadow-md flex-row-reverse">
+                <span class="text-white font-bold uppercase tracking-widest text-xs hidden md:block opacity-80 group-hover:opacity-100 transition-opacity">Cerrar</span>
+                <svg class="h-6 w-6 text-white transform group-hover:rotate-90 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+
+            <div class="flex flex-col lg:flex-row-reverse h-full">
+                <div class="lg:w-2/5 flex flex-col justify-between bg-black text-white border-l border-white/10 relative shrink-0 order-2 lg:order-1 h-full overflow-y-auto custom-scrollbar pb-40 md:pb-12">
+                    <div class="p-8 md:p-12 lg:p-16 flex flex-col min-h-max pb-48 lg:pb-16">
+                        <div class="mb-10">
+                            <span class="text-gray-500 font-bold uppercase tracking-[0.2em] text-xs mb-4 block">Arquitectura & Entorno</span>
+                            <h2 class="font-display font-black text-3xl md:text-5xl lg:text-6xl text-white uppercase leading-none mb-6">Identidad<br>Situada.</h2>
+                            <div class="mb-8 relative"><p class="text-base lg:text-lg text-gray-300 leading-relaxed italic relative z-10 pl-6 border-l-4 border-white">"Nos sentimos muy arraigados en la arquitectura del Norte —de Jujuy, de Salta—. Más allá de las cuestiones estilísticas y de diseño, nos guían el clima, la topografía, los desniveles y hasta la misma flora y fauna de la zona. Para nosotros es una premisa adaptarnos al entorno y que se establezca un diálogo fluido entre el paisaje y lo que creamos. Siempre pensamos desde el respeto a los terrenos: ellos están desde antes y nosotros tenemos que adaptarnos a ellos"</p><p class="mt-4 text-xs font-bold uppercase tracking-widest text-white">— Arq. Felipe Forbice</p></div>
+                        </div>
+                        <div class="space-y-6 border-t border-white/10 pt-6">
+                            <div class="group"><p class="text-sm font-bold text-white uppercase tracking-wide">Proceso de Trabajo</p><p class="text-xs text-gray-400 mt-1 leading-relaxed">"La inspiración es un 10%, el esfuerzo es un 90%". Enfoque pragmático para resolver problemáticas del habitar.</p></div>
+                            <div class="group"><p class="text-sm font-bold text-white uppercase tracking-wide">Territorio</p><div class="flex flex-wrap gap-2 mt-2"><span class="px-2 py-1 border border-white/20 text-[10px] uppercase tracking-wider text-gray-300">Yungas</span><span class="px-2 py-1 border border-white/20 text-[10px] uppercase tracking-wider text-gray-300">Quebrada</span><span class="px-2 py-1 border border-white/20 text-[10px] uppercase tracking-wider text-gray-300">Ramal</span></div></div>
+                        </div>
+                        <div class="mt-auto flex justify-end pt-4"><a href="https://www.instagram.com/forbicearquitecturaydiseno/" target="_blank" class="text-6xl font-thin text-white hover:text-forbice-red transition-colors duration-300 leading-none" title="Instagram">[+]</a></div>
+                    </div>
+                </div>
+                <div class="w-full lg:w-3/5 h-[40vh] lg:h-full bg-gray-900 relative shrink-0 order-1 lg:order-2 group/slider" 
+                     x-data="{ active: 0, slides: [
+                        { img: 'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/arqdisrender.jpg', title: 'VISIÓN CONCEPTUAL', desc: 'Innovación y diseño integral centrados en la experiencia habitacional del futuro.' },
+                        { img: 'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/DSC_0975.jpg', title: 'INTERIORISMO', desc: 'Espacios que priorizan la experiencia del usuario.' },
+                        { img: 'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/DSC_1052.jpg', title: 'IDENTIDAD MATERIAL', desc: 'Uso de recursos locales y materialidad honesta.' },
+                        { img: 'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/DSC_1301.jpg', title: 'ADAPTACIÓN TOPOGRÁFICA', desc: 'Diseño sensible a los desniveles naturales del terreno.' },
+                        { img: 'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/DSC_1314.jpg', title: 'LUZ Y SOMBRA', desc: 'Estudio bioclimático para el máximo confort térmico y eficiencia energética.' },
+                        { img: 'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/IMG_5282.jpg', title: 'DIÁLOGO CON EL PAISAJE', desc: 'Arquitectura introspectiva que respeta la preexistencia del terreno y su biodiversidad.' }
+                     ]}">
+                    
+                    <template x-for="(slide, index) in slides" :key="index">
+                        <div x-show="active === index" class="absolute inset-0 transition-opacity duration-700 ease-in-out cursor-pointer" @click="openLightbox(slide.img, slides.map(s => s.img), index)">
+                            <img :src="slide.img" class="w-full h-full object-cover opacity-90">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+                            
+                            <div class="absolute bottom-0 right-0 w-full p-6 md:p-12 lg:p-16 text-right pointer-events-none">
+                                <p class="text-white/50 font-bold uppercase tracking-widest text-xs mb-2" x-text="'0' + (index + 1) + ' / 0' + slides.length"></p>
+                                <h3 class="text-2xl lg:text-3xl font-display font-bold text-white uppercase mb-2" x-text="slide.title"></h3>
+                                <p class="text-gray-300 max-w-md ml-auto text-sm lg:text-base leading-relaxed hidden md:block" x-text="slide.desc"></p>
+                            </div>
+                        </div>
+                    </template>
+
+                    <div class="absolute bottom-6 left-6 lg:bottom-12 lg:left-12 flex space-x-2 z-20">
+                        <button @click.stop="active = active === 0 ? slides.length - 1 : active - 1" class="p-3 lg:p-4 border border-white/20 text-white hover:bg-white hover:text-black transition-colors bg-black/20 lg:bg-transparent"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+                        <button @click.stop="active = active === slides.length - 1 ? 0 : active + 1" class="p-3 lg:p-4 border border-white/20 text-white hover:bg-white hover:text-black transition-colors bg-black/20 lg:bg-transparent"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- D. PORTFOLIO DE OBRAS (Technical Grid) -->
+    <section id="obras" class="py-24 bg-forbice-gray relative">
+        <div class="container mx-auto px-6">
+            
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 border-b-2 border-black pb-6">
+                <div>
+                    <h2 class="text-6xl md:text-8xl font-display font-black text-forbice-black uppercase tracking-tighter">OBRAS</h2>
+                </div>
+                
+                <div class="flex space-x-8 mt-8 md:mt-0 overflow-x-auto pb-4 md:pb-0 w-full md:w-auto no-scrollbar scroll-pl-6 pr-6 md:pr-0">
+                    <button @click="tab = 'execution'" class="text-sm uppercase tracking-[0.2em] font-bold pb-4 transition-all relative whitespace-nowrap flex-shrink-0" :class="tab === 'execution' ? 'text-forbice-black opacity-100' : 'text-gray-400 opacity-60 hover:opacity-100'">
+                        En Ejecución
+                        <span x-show="tab === 'execution'" class="absolute bottom-0 left-0 w-full h-[3px] bg-forbice-red" x-transition.opacity></span>
+                    </button>
+                    <button @click="tab = 'history'" class="text-sm uppercase tracking-[0.2em] font-bold pb-4 transition-all relative whitespace-nowrap flex-shrink-0" :class="tab === 'history' ? 'text-forbice-black opacity-100' : 'text-gray-400 opacity-60 hover:opacity-100'">
+                        Entregadas
+                        <span x-show="tab === 'history'" class="absolute bottom-0 left-0 w-full h-[3px] bg-forbice-red" x-transition.opacity></span>
+                    </button>
+                    <button @click="tab = 'corporate'" class="text-sm uppercase tracking-[0.2em] font-bold pb-4 transition-all relative whitespace-nowrap flex-shrink-0" :class="tab === 'corporate' ? 'text-forbice-black opacity-100' : 'text-gray-400 opacity-60 hover:opacity-100'">
+                        Corporativas
+                        <span x-show="tab === 'corporate'" class="absolute bottom-0 left-0 w-full h-[3px] bg-forbice-red" x-transition.opacity></span>
+                    </button>
+                </div>
+            </div>
+
+            <div x-show="tab === 'execution'" class="animate-fade-in">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-1">
+                    
+                    <div class="group relative md:col-span-2 aspect-[16/9] md:aspect-[2.5/1] bg-gray-200 overflow-hidden cursor-pointer" @click="openProject('torres')">
+                        <img src="https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/torres-lujan-noche.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        
+                        <div class="absolute inset-0 p-8 md:p-12 flex flex-col justify-end">
+                            <p class="text-forbice-red font-bold uppercase tracking-widest text-xs mb-2">En Ejecución | Obra Insignia</p>
+                            <div class="flex justify-between items-end w-full">
+                                <div>
+                                    <h3 class="text-3xl md:text-5xl font-display font-black text-white uppercase leading-none mb-2">Torres de<br>Luján</h3>
+                                    <p class="text-gray-300 text-sm md:text-base max-w-lg hidden md:block">Desarrollo PPP (Forbice + IVUJ).</p>
+                                </div>
+                                <div class="w-12 h-12 border border-white/50 rounded-full flex items-center justify-center text-white group-hover:bg-white group-hover:text-forbice-black transition-all duration-300 transform group-hover:rotate-90">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M12 6v12m6-6H6"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="group relative aspect-square bg-gray-200 overflow-hidden cursor-pointer" @click="openProject('casaspatio')">
+                        <div class="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/80 px-3 py-1.5 backdrop-blur-sm border border-white/10 rounded-sm shadow-lg pointer-events-none">
+                            <span class="relative flex h-2 w-2">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-forbice-red opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-forbice-red"></span>
+                            </span>
+                            <span class="text-[10px] font-bold text-white uppercase tracking-wider leading-none">Unidades en Venta</span>
+                        </div>
+                        
+                        <img src="https://raw.githubusercontent.com/forbice/fotos/main/casaspatio-1.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        
+                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
+                            <p class="text-forbice-red font-bold uppercase tracking-widest text-xs mb-2">Vivienda | En Pozo</p>
+                            <div class="flex justify-between items-end w-full">
+                                <div>
+                                    <h3 class="text-2xl md:text-3xl font-display font-black text-white uppercase leading-none mb-1">Casas<br>Patio</h3>
+                                    <p class="text-gray-300 text-xs md:text-sm">Conjunto residencial (7 unidades) | Entrega: 2027</p>
+                                </div>
+                                <div class="w-10 h-10 border border-white/50 rounded-full flex items-center justify-center text-white group-hover:bg-white group-hover:text-forbice-black transition-all duration-300 transform group-hover:rotate-90">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M12 6v12m6-6H6"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="group relative aspect-square bg-gray-200 overflow-hidden cursor-pointer" @click="openProject('hilanderia')">
+                        <div class="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/80 px-3 py-1.5 backdrop-blur-sm border border-white/10 rounded-sm shadow-lg pointer-events-none">
+                            <span class="relative flex h-2 w-2">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-forbice-red opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-forbice-red"></span>
+                            </span>
+                            <span class="text-[10px] font-bold text-white uppercase tracking-wider leading-none">Unidades en Venta</span>
+                        </div>
+
+                        <img src="https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/hilanderia-1.jpeg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        
+                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
+                            <p class="text-forbice-red font-bold uppercase tracking-widest text-xs mb-2">Patrimonio</p>
+                            <div class="flex justify-between items-end w-full">
+                                <div>
+                                    <h3 class="text-2xl md:text-3xl font-display font-black text-white uppercase leading-none mb-1">La<br>Hilandería</h3>
+                                    <p class="text-gray-300 text-xs md:text-sm">Refuncionalización Patrimonial / Distrito de Usos Mixtos.</p>
+                                </div>
+                                <div class="w-10 h-10 border border-white/50 rounded-full flex items-center justify-center text-white group-hover:bg-white group-hover:text-forbice-black transition-all duration-300 transform group-hover:rotate-90">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M12 6v12m6-6H6"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div x-show="tab === 'history'" x-transition.opacity class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-t border-l border-gray-300">
+                
+                <div @click="openProject('promace')" class="group bg-white border-r border-b border-gray-300 relative aspect-[3/2] overflow-hidden cursor-pointer">
+                    <div class="absolute inset-0"><img src="https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/Captura%20de%20pantalla%202023-10-06%20113442.png" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter grayscale group-hover:grayscale-0"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                        <span class="text-forbice-red text-xs font-bold uppercase tracking-widest mb-1">EDUCACIÓN</span>
+                        <div class="flex justify-between items-end mb-3">
+                            <h4 class="text-2xl font-display font-bold text-white uppercase leading-none">Programa<br>PROMACE</h4>
+                            <div class="w-8 h-8 border border-white/50 flex items-center justify-center text-white rounded-full">+</div>
+                        </div>
+                        <p class="text-gray-300 text-xs border-t border-white/20 pt-3">Programa de Mejora del Acceso y la Calidad Educativa.</p>
+                    </div>
+                </div>
+
+                <div @click="openProject('apart')" class="group bg-white border-r border-b border-gray-300 relative aspect-[3/2] overflow-hidden cursor-pointer">
+                    <div class="absolute inset-0"><img src="https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/FEYC_AP_3.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter grayscale group-hover:grayscale-0"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                        <span class="text-forbice-red text-xs font-bold uppercase tracking-widest mb-1">Turismo</span>
+                        <div class="flex justify-between items-end mb-3">
+                            <h4 class="text-2xl font-display font-bold text-white uppercase leading-none">Apart Hotel<br>"LOS PERALES"</h4>
+                            <div class="w-8 h-8 border border-white/50 flex items-center justify-center text-white rounded-full">+</div>
+                        </div>
+                        <p class="text-gray-300 text-xs border-t border-white/20 pt-3">Complejo turístico residencial.</p>
+                    </div>
+                </div>
+
+                <div @click="openProject('adep')" class="group bg-white border-r border-b border-gray-300 relative aspect-[3/2] overflow-hidden cursor-pointer">
+                    <div class="absolute inset-0"><img src="https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/100_5893.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter grayscale group-hover:grayscale-0"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                        <span class="text-forbice-red text-xs font-bold uppercase tracking-widest mb-1">Vivienda</span>
+                        <div class="flex justify-between items-end mb-3">
+                            <h4 class="text-2xl font-display font-bold text-white uppercase leading-none">A.D.E.P.<br>HUMAHUACA</h4>
+                            <div class="w-8 h-8 border border-white/50 flex items-center justify-center text-white rounded-full">+</div>
+                        </div>
+                        <p class="text-gray-300 text-xs border-t border-white/20 pt-3">Convenios de vivienda | Asociación de Educadores Provinciales</p>
+                    </div>
+                </div>
+
+                <div @click="openProject('amperpag')" class="group bg-white border-r border-b border-gray-300 relative aspect-[3/2] overflow-hidden cursor-pointer">
+                    <div class="absolute inset-0"><img src="https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/FEYC_AMP_1.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter grayscale group-hover:grayscale-0"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                        <span class="text-forbice-red text-xs font-bold uppercase tracking-widest mb-1">Vivienda</span>
+                        <div class="flex justify-between items-end mb-3">
+                            <h4 class="text-2xl font-display font-bold text-white uppercase leading-none">AMPERPAG</h4>
+                            <div class="w-8 h-8 border border-white/50 flex items-center justify-center text-white rounded-full">+</div>
+                        </div>
+                        <p class="text-gray-300 text-xs border-t border-white/20 pt-3">Complejo habitacional | Asociación Mutual del Personal del Palacio de Gobierno.</p>
+                    </div>
+                </div>
+
+                <div @click="openProject('pucarita')" class="group bg-white border-r border-b border-gray-300 relative aspect-[3/2] overflow-hidden cursor-pointer">
+                    <div class="absolute inset-0"><img src="https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/pucarita-entrada.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter grayscale group-hover:grayscale-0"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                        <span class="text-forbice-red text-xs font-bold uppercase tracking-widest mb-1">Educación</span>
+                        <div class="flex justify-between items-end mb-3">
+                            <h4 class="text-2xl font-display font-bold text-white uppercase leading-none">Jardín Maternal<br>Pucarita</h4>
+                            <div class="w-8 h-8 border border-white/50 flex items-center justify-center text-white rounded-full">+</div>
+                        </div>
+                        <p class="text-gray-300 text-xs border-t border-white/20 pt-3">Institución educativa de nivel inicial.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div x-show="tab === 'corporate'" x-transition.opacity class="grid grid-cols-1 md:grid-cols-2 gap-0 border-t border-l border-gray-300">
+                <div @click="openProject('ejesa')" class="group bg-white border-r border-b border-gray-300 relative aspect-[3/2] overflow-hidden cursor-pointer">
+                    <div class="absolute inset-0"><img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover cinematic-img"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                        <span class="text-forbice-red text-xs font-bold uppercase tracking-widest mb-1">Energía</span>
+                        <div class="flex justify-between items-end mb-3">
+                            <h4 class="text-3xl font-display font-bold text-white uppercase leading-none">Cliente<br>EJESA</h4>
+                            <div class="w-10 h-10 border border-white/50 flex items-center justify-center text-white rounded-full hover:bg-white hover:text-black transition-colors">+</div>
+                        </div>
+                        <p class="text-gray-300 text-xs border-t border-white/20 pt-3">Consultoría técnica y Saneamiento | Empresa Jujeña de Energía S.A.</p>
+                    </div>
+                </div>
+                <div @click="openProject('infra')" class="group bg-white border-r border-b border-gray-300 relative aspect-[3/2] overflow-hidden cursor-pointer">
+                    <div class="absolute inset-0"><img src="https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/FEYC_RED_1.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter grayscale group-hover:grayscale-0"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                        <span class="text-forbice-red text-xs font-bold uppercase tracking-widest mb-1">Loteos</span>
+                        <div class="flex justify-between items-end mb-3">
+                            <h4 class="text-3xl font-display font-bold text-white uppercase leading-none">Redes e<br>Infraestructura</h4>
+                            <div class="w-10 h-10 border border-white/50 flex items-center justify-center text-white rounded-full hover:bg-white hover:text-black transition-colors">+</div>
+                        </div>
+                        <p class="text-gray-300 text-xs border-t border-white/20 pt-3">Ejecución de nexos para factibilidad de servicios.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    <div x-show="projectOpen" class="fixed inset-0 z-[200] overflow-hidden" x-cloak>
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-sm transition-opacity duration-500" x-show="projectOpen" x-transition:enter="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="opacity-0" @click="closeProject()"></div>
+        <div class="absolute inset-y-0 right-0 w-full bg-white shadow-2xl transform transition-transform duration-500 ease-in-out flex flex-col h-full overflow-hidden" x-show="projectOpen" x-transition:enter="translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="translate-x-full">
+            
+            <button @click="closeProject()" class="absolute top-6 right-6 z-50 flex items-center gap-2 group cursor-pointer drop-shadow-md">
+                <span class="text-white font-bold uppercase tracking-widest text-xs hidden md:block opacity-80 group-hover:opacity-100 transition-opacity">Cerrar Obra</span>
+                <svg class="h-6 w-6 text-white transform group-hover:rotate-90 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+
+            <div class="flex flex-col lg:flex-row-reverse h-full">
+                <div class="lg:w-2/5 flex flex-col bg-white border-l border-gray-100 relative shrink-0 order-2 h-full overflow-y-auto custom-scrollbar pb-40 md:pb-10">
+                    <div class="p-8 md:p-12 lg:p-16 flex flex-col min-h-max pb-48 lg:pb-16">
+                        <div class="mb-10">
+                            <span class="text-forbice-red font-bold uppercase tracking-[0.2em] text-xs mb-4 block" x-text="activeProject?.category"></span>
+                            <h2 class="font-display font-black text-3xl md:text-5xl lg:text-5xl text-forbice-black uppercase leading-none mb-4" x-text="activeProject?.title"></h2>
+                            <div class="flex items-center text-gray-500 text-sm font-medium"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span x-text="activeProject?.location"></span></div>
+                        </div>
+                        <div class="mb-10"><p class="text-gray-600 leading-relaxed text-lg" x-html="activeProject?.description"></p></div>
+                        
+                        <div x-show="activeProject?.commercialLink" class="mb-10">
+                            <a :href="activeProject?.commercialLink" target="_blank" class="inline-flex items-center justify-center w-full px-8 py-4 bg-forbice-black text-white font-bold uppercase tracking-widest text-sm hover:bg-forbice-red transition-all duration-300 group">
+                                Ver Financiación
+                                <svg class="ml-3 w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            </a>
+                        </div>
+
+                        <div class="mt-auto bg-forbice-gray p-6 md:p-8">
+                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">Ficha Técnica</h4>
+                            <div class="space-y-4">
+                                <template x-for="spec in activeProject?.specs || []">
+                                    <div class="flex items-start group">
+                                        <div class="w-8 pt-1 text-forbice-red">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" :d="getIcon(spec.icon)"></path>
+                                            </svg>
+                                        </div>
+                                        <div><p class="text-xs text-gray-400 uppercase tracking-wider mb-0.5" x-text="spec.label"></p><p class="text-sm font-bold text-forbice-black" x-text="spec.value"></p></div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full lg:w-3/5 h-[40vh] lg:h-full bg-black relative shrink-0 order-1 group/slider">
+                    <template x-for="(img, index) in activeProject?.gallery || []"><div x-show="currentImg === index" class="absolute inset-0 transition-opacity duration-500 cursor-pointer" @click="openLightbox(img, activeProject.gallery, index)"><img :src="img" class="w-full h-full object-cover opacity-100"><div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div></div></template>
+                    
+                    <div x-show="activeProject?.gallery && activeProject.gallery.length > 1">
+                        <button @click.stop="currentImg = currentImg === 0 ? activeProject.gallery.length - 1 : currentImg - 1" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-sm transition-all border border-white/10"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+                        <button @click.stop="currentImg = currentImg === activeProject.gallery.length - 1 ? 0 : currentImg + 1" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-sm transition-all border border-white/10"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
+                    </div>
+                    <div class="absolute bottom-6 right-6 px-3 py-1 bg-black/50 backdrop-blur text-white text-xs font-bold uppercase tracking-widest rounded pointer-events-none" x-text="'IMG ' + (currentImg + 1) + ' / ' + (activeProject?.gallery ? activeProject.gallery.length : 0)"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div x-show="lightboxOpen" 
+         x-transition.opacity 
+         class="fixed inset-0 z-[200] bg-black/95 flex items-center justify-center overflow-hidden" 
+         x-cloak 
+         @mousemove="handleMouseMove($event)"
+         @wheel.prevent="handleWheel($event)"
+         @click="closeLightbox()"
+         @keydown.window.escape="closeLightbox()"
+         @keydown.window.arrow-right="nextLightboxImage()"
+         @keydown.window.arrow-left="prevLightboxImage()">
+        
+        <button @click.stop="closeLightbox()" class="absolute top-6 right-6 z-50 text-white/70 hover:text-white transition-colors p-2 bg-black/20 rounded-full backdrop-blur-sm cursor-pointer hover:bg-black/50">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+
+        <button x-show="lightboxGallery && lightboxGallery.length > 1" 
+                @click.stop="prevLightboxImage()" 
+                class="absolute left-4 top-1/2 transform -translate-y-1/2 z-50 text-white/70 hover:text-white p-4 hover:bg-black/20 rounded-full transition-all cursor-pointer">
+            <svg class="w-8 h-8 md:w-10 md:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+
+        <button x-show="lightboxGallery && lightboxGallery.length > 1" 
+                @click.stop="nextLightboxImage()" 
+                class="absolute right-4 top-1/2 transform -translate-y-1/2 z-50 text-white/70 hover:text-white p-4 hover:bg-black/20 rounded-full transition-all cursor-pointer">
+            <svg class="w-8 h-8 md:w-10 md:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+
+        <div class="relative w-full h-full flex items-center justify-center p-4">
+            <img :src="activeImage" 
+                 id="zoomed-image"
+                 class="max-w-full max-h-screen object-contain transition-transform duration-200 ease-out shadow-2xl select-none"
+                 :class="zoomLevel === 1 ? 'cursor-zoom-in' : 'cursor-zoom-out'"
+                 :style="`transform: scale(${zoomLevel}); transform-origin: ${moveX}% ${moveY}%;`"
+                 @click.stop="toggleZoom($event)">
+                 
+            <div x-show="zoomLevel === 1" 
+                 class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white/50 text-xs uppercase tracking-widest pointer-events-none animate-pulse">
+                Click / Rueda para Zoom
+            </div>
+
+            <div x-show="lightboxGallery && lightboxGallery.length > 1 && zoomLevel === 1" 
+                 class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/80 font-bold text-sm bg-black/50 px-3 py-1 rounded-full backdrop-blur-sm pointer-events-none">
+                <span x-text="lightboxIndex + 1"></span> / <span x-text="lightboxGallery.length"></span>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <section id="inversion" class="py-32 bg-forbice-black text-white relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-1/3 h-full bg-forbice-red opacity-10 skew-x-12 transform translate-x-20 pointer-events-none"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center justify-between">
+                
+                <div class="lg:w-1/2 mb-16 lg:mb-0">
+                    <h2 class="text-5xl md:text-7xl font-display font-black mb-8 tracking-tighter leading-tight">
+                        INVERSIONES <br>SÓLIDAS.
+                    </h2>
+                    <p class="text-xl text-gray-300 font-light mb-10 max-w-md border-l border-white/20 pl-6">
+                        Tu capital, respaldado por 30 años de trayectoria. Ladrillo real, rentabilidad tangible.
+                    </p>
+                    <a href="#contacto" @click.prevent="scrollTo('contacto')" class="inline-block px-10 py-4 bg-white text-forbice-black font-bold uppercase tracking-widest hover:bg-forbice-red hover:text-white transition-colors duration-300">
+                        Quiero Invertir
+                    </a>
+                </div>
+                
+                <div class="lg:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+                    <div class="border border-white/20 p-10 hover:border-white transition-colors duration-300 group bg-forbice-black">
+                        <svg class="w-12 h-12 text-forbice-red mb-6 opacity-80 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                        <h4 class="text-xl font-bold font-display uppercase mb-3">Desarrollos Propios</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors">Dúplex y Departamentos con diseño premium y terminaciones de calidad garantizada por la constructora.</p>
+                    </div>
+                    
+                    <div class="border border-white/20 p-10 hover:border-white transition-colors duration-300 group bg-forbice-black">
+                        <svg class="w-12 h-12 text-forbice-red mb-6 opacity-80 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="1.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0121 18.382V7.618a1 1 0 01-.447-.894L15 7m0 13V7"></path></svg>
+                        <h4 class="text-xl font-bold font-display uppercase mb-3">Loteos Premium</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors">Terrenos con infraestructura de redes terminada y listos para escriturar.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto" class="relative bg-white py-24">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row h-full border border-gray-200">
+                
+                <div class="lg:w-2/5 bg-forbice-gray p-12 lg:p-16 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-4xl font-display font-black text-forbice-black mb-12 uppercase tracking-tight">DÓNDE ESTAMOS</h3>
+                        
+                        <div class="space-y-8">
+                            <div class="group">
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Dirección</p>
+                                <p class="text-xl font-bold text-forbice-black">Pemberton 130</p>
+                                <p class="text-lg text-gray-600">B° Los Perales, Jujuy</p>
+                            </div>
+                            
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Digital</p>
+                                <a href="mailto:contacto@feycsrl.com.ar" class="block text-lg font-bold text-forbice-black hover:text-forbice-red transition-colors">contacto@feycsrl.com.ar</a>
+                                <p class="text-lg text-gray-600">+54 388 426 0391</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full h-64 md:h-64 grayscale hover:grayscale-0 transition-all duration-500 rounded-none overflow-hidden mt-8 shadow-sm">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3641.5332658467!2d-65.2858!3d-24.1175!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x941b0f44e7c7c35f%3A0x6b8b2b2b2b2b2b2b!2sPemberton%20130%2C%20San%20Salvador%20de%20Jujuy%2C%20Jujuy!5e0!3m2!1ses!2sar!4v1620000000000!5m2!1ses!2sar" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy">
+                        </iframe>
+                    </div>
+
+                    <div class="mt-8 border-t border-gray-300 pt-8">
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">REDES SOCIALES</p>
+                        <div class="flex space-x-4">
+                            <a href="https://www.instagram.com/feycsrl/" target="_blank" rel="noopener noreferrer" class="p-3 bg-white text-forbice-black hover:bg-forbice-black hover:text-white transition-colors border border-gray-200">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                            </a>
+                            <a href="https://www.facebook.com/forbiceestudiosycontruccionessrl/" target="_blank" rel="noopener noreferrer" class="p-3 bg-white text-forbice-black hover:bg-forbice-black hover:text-white transition-colors border border-gray-200">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.791-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:w-3/5 p-12 lg:p-16 bg-white">
+                    <h3 class="text-3xl font-display font-bold text-forbice-black mb-2 uppercase">HABLEMOS DE FUTURO</h3>
+                    <p class="text-gray-500 mb-10">Complete el formulario para iniciar una gestión directa.</p>
+
+                    <form @submit.prevent="submitForm" class="space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-1 relative group">
+                                <input type="text" id="name" class="w-full border-b border-gray-300 py-3 focus:outline-none focus:border-forbice-black transition-colors bg-transparent text-lg text-forbice-black placeholder-gray-400" placeholder="Nombre y Apellido" required>
+                            </div>
+                            <div class="space-y-1 relative group">
+                                <input type="text" id="contact" class="w-full border-b border-gray-300 py-3 focus:outline-none focus:border-forbice-black transition-colors bg-transparent text-lg text-forbice-black placeholder-gray-400" placeholder="Email / Teléfono" required>
+                            </div>
+                        </div>
+
+                        <div class="relative group">
+                            <select class="w-full bg-gray-50 border-b-2 border-gray-200 text-gray-500 font-bold uppercase text-xs tracking-wider p-4 appearance-none focus:outline-none focus:border-forbice-red focus:bg-white focus:text-black transition-all duration-300 cursor-pointer rounded-none hover:bg-gray-100" required>
+                                <option value="" disabled selected>Departamento de Interés</option>
+                                <option value="comercial" class="text-black">Quiero invertir / Comprar unidad</option>
+                                <option value="tecnica" class="text-black">Obra pública / Licitaciones</option>
+                                <option value="proveedores" class="text-black">Diseño y proyecto (Arq+Dis)</option>
+                                <option value="rrhh" class="text-black">Otros servicios</option>
+                            </select>
+                            <div class="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none transition-transform duration-300 group-hover:translate-x-1">
+                                <svg class="w-5 h-5 text-gray-400 group-hover:text-forbice-red transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </div>
+                            <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-forbice-red transition-all duration-300 group-hover:w-full"></div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <textarea id="message" rows="3" class="w-full border-b border-gray-300 py-3 focus:outline-none focus:border-forbice-black transition-colors bg-transparent text-lg text-forbice-black resize-none placeholder-gray-400" placeholder="Detalle su consulta..." required></textarea>
+                        </div>
+
+                        <div class="pt-6 flex flex-col md:flex-row items-center justify-between gap-6">
+                             <label class="cursor-pointer flex items-center space-x-3 text-gray-400 hover:text-forbice-black transition-colors group">
+                                <div class="p-2 border border-gray-300 group-hover:border-black transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                                </div>
+                                <span class="text-xs font-bold uppercase tracking-widest">Adjuntar Archivo</span>
+                                <input type="file" class="hidden">
+                            </label>
+
+                            <button id="submitBtn" type="submit" class="w-full md:w-auto px-10 py-4 bg-forbice-black text-white font-bold uppercase tracking-widest hover:bg-forbice-red transition-all duration-300 border border-transparent hover:shadow-xl">
+                                Enviar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-white border-t border-gray-200 py-12 text-center">
+        <p class="text-gray-400 text-xs font-bold tracking-widest uppercase">
+            &copy; 2025 Forbice Estudios y Construcciones S.R.L.
+        </p>
+    </footer>
+
+    <script>
+        function app() {
+            return {
+                mobileMenuOpen: false,
+                scrolled: false,
+                historyOpen: false,
+                founderOpen: false,
+                constructionOpen: false,
+                designOpen: false,
+                tab: 'execution',
+                projectOpen: false,
+                activeProject: null, 
+                currentImg: 0, 
+                // ESTADO LIGHTBOX (Centralizado)
+                activeImage: null,
+                lightboxOpen: false,
+                lightboxGallery: [], // Array para el carrusel
+                lightboxIndex: 0,    // Índice actual
+                zoomLevel: 1,        // Estado del Zoom
+                moveX: 50,           // Posición X
+                moveY: 50,           // Posición Y
+                icons: { 'building': 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m8-2a2 2 0 104 0m-4-4a2 2 0 104 0m-4-4a2 2 0 104 0M3 7h2m-2 4h2m-2 4h2m-2 4h2m-2 4h2m-2 4h2m-2 4h2', 'home': 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6', 'layer': 'M12 2L2 7l10 5 10-5-10-5zm0 9l2-10 5-10-5 10-5zm0 9l2-10 5-10-5 10-5zm0 9l2-10 5-10-5 10-5', 'layers': 'M12 2L2 7l10 5 10-5-10-5zm0 9l2-10 5-10-5 10-5zm0 9l2-10 5-10-5 10-5zm0 9l2-10 5-10-5 10-5', 'activity': 'M22 12h-4l-3 9L9 3l-3 9H2', 'mountain': 'M12 4l-8 16h16l-8-16z M8 14l4-8 4 8H8z', 'thermometer': 'M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z', 'truck': 'M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z', 'check': 'M20 6L9 17l-5-5', 'user': 'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2', 'droplet': 'M12 2.69l5.66 5.66a8 8 0 11-11.31 0z', 'settings': 'M12 15a3 3 0 100-6 3 3 0 000 6z', 'briefcase': 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', 'smile': 'M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z', 'sun': 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z', 'map': 'M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0121 18.382V7.618a1 1 0 01-.447-.894L15 7m0 13V7', 'zap': 'M13 10V3L4 14h7v7l9-11h-7z', 'grid': 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z', 'file-text': 'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z', 'globe': 'M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9', 'star': 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z', 'maximize': 'M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3' },
+
+                init() {
+                    this.$watch('mobileMenuOpen', v => this.toggleScroll(v));
+                    this.$watch('historyOpen', v => this.toggleScroll(v));
+                    this.$watch('founderOpen', v => this.toggleScroll(v));
+                    this.$watch('constructionOpen', v => this.toggleScroll(v));
+                    this.$watch('designOpen', v => this.toggleScroll(v));
+                    this.$watch('projectOpen', v => this.toggleScroll(v));
+                    this.$watch('lightboxOpen', v => this.toggleScroll(v));
+                },
+
+                toggleScroll(lock) {
+                    if (lock) document.body.classList.add('overflow-hidden');
+                    else if (!this.mobileMenuOpen && !this.historyOpen && !this.founderOpen && !this.constructionOpen && !this.designOpen && !this.projectOpen && !this.lightboxOpen) document.body.classList.remove('overflow-hidden');
+                },
+                
+                projects: {
+                    'torres': {
+                        id: 'OBRA-2025-TL',
+                        category: 'En Ejecución | Obra Insignia',
+                        title: 'Torres de Luján',
+                        location: 'B° Luján, San Salvador de Jujuy',
+                        description: 'Desarrollo mixto de gran escala bajo modelo PPP. El proyecto articula una Torre (PB+7) y un Bloque Anexo (PB+4) con 46 unidades funcionales. Desafío técnico de fundaciones profundas en suelo aluvional y estructura sismorresistente de alta performance.',
+                        specs: [
+                            { label: 'Estructura', value: 'Hormigón Armado H-30 (CIRSOC 201)', icon: 'layer' },
+                            { label: 'Fundaciones', value: 'Pilotes In Situ Ø80cm (-8.00m)', icon: 'activity' },
+                            { label: 'Mampostería', value: 'Ladrillo Cerámico 18x18x33', icon: 'building' },
+                            { label: 'Programa', value: '46 Deptos + 6 Locales', icon: 'home' }
+                        ],
+                        gallery: [
+                            'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/torres-lujan-noche.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/locales-comercios.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/departamento-2dorm.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/departamento-2dorm-duplex.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/balc-lujan.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/TORRES-DE-LUJAN.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/IMG_20260108_112156.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/IMG_20251215_115440.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/IMG_20250930_104249.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/842f2795f15adf8c8d85f942b7bc7b3677507163/IMG_20250627_164607.jpg'
+                        ]
+                    },
+                    'casaspatio': {
+                        id: 'OBRA-2026-CP',
+                        category: 'VIVIENDA | VENTA EN POZO',
+                        title: 'Casas Patio',
+                        location: 'Pacará y esq. El Picaflor, B° Los Perales',
+                        description: '<b>Conjunto residencial (7 unidades).</b><br><br>Desarrollado en un lote de gran dimensión, el proyecto reinterpreta la tipología de "Casa Patio", articulando los espacios sociales y privados alrededor de expansiones propias (jardín/galería) para garantizar iluminación natural, ventilación cruzada y privacidad en un entorno urbano consolidado.<br><br><b>DISTRIBUCIÓN:</b><br>Área Social: Estar-Comedor pasante con expansión a galería. Cocina integrada.<br>Área Intima: 2 Dormitorios + Baño completo.<br>Servicios: Toilette, Lavadero y Cochera doble.',
+                        commercialLink: 'https://www.3a.com.ar/p/7686698-Casa-en-Venta-en-Los-Perales-Pacara-esq.-El-Picaflor?fbclid=IwY2xjawP7FqlleHRuA2FlbQIxMQBicmlkETF6Qm1ua3UwTWlHakhZa3Rsc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHvi5JF_zgT1cy19eELyQztmAAQSh_-AweJnnsn3sGQCkHT7-Aqc-u_4zwOlI_aem_W5JeaixjjNQ8H_-b4afPJg',
+                        specs: [
+                            { label: 'Autoría', value: 'Arq. Felipe Forbice', icon: 'user' },
+                            { label: 'Tipología', value: 'Vivienda Unifamiliar Apareada', icon: 'home' },
+                            { label: 'Superficie', value: 'Cub: 125 m² | Lote: ~260 m²', icon: 'maximize' },
+                            { label: 'Materialidad', value: 'Ladrillo / DVH / Porcelanato', icon: 'layers' }
+                        ],
+                        gallery: [
+                            'https://raw.githubusercontent.com/forbice/fotos/main/casaspatio-1.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/main/casaspatio-2.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/main/casaspatio-3.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/main/casaspatio-4.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/main/casaspatio-5.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/main/casaspatio-6.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/main/casaspatio-7.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/main/casaspatio-8.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/main/casaspatio-9.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/main/casaspatio-10.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/main/casaspatio-11.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/main/casaspatio-12.jpg'
+                        ]
+                    },
+                    'hilanderia': {
+                        id: 'OBRA-2026-LH',
+                        category: 'En Ejecución | Patrimonio',
+                        title: 'La Hilandería',
+                        location: 'Av. Bolivia 1500, San Salvador de Jujuy',
+                        description: 'Refuncionalización de antigua nave industrial (+12.000 m²). Intervención quirúrgica sobre estructura existente para generar un polo cultural, respetando las cabreadas originales e integrando refuerzos metálicos contemporáneos.',
+                        specs: [
+                            { label: 'Cubierta', value: 'Panel Sándwich (PUR) Térmico', icon: 'layer' },
+                            { label: 'Estructura', value: 'Mixta: Reticulado + Steel Frame', icon: 'settings' },
+                            { label: 'Fachada', value: 'Ladrillo Visto Arenado + Piel de Vidrio', icon: 'building' },
+                            { label: 'Destino', value: 'Mercado / Loft / Coworking', icon: 'map' }
+                        ],
+                        gallery: [
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/hilanderia-1.jpeg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/hilanderia-2.jpeg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/hilanderia-3.jpeg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/hilanderia-4.jpeg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/hilanderia-5.jpeg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/hilanderia-6.jpeg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/hilanderia-7.jpeg'
+                        ]
+                    },
+                    'promace': {
+                        id: 'OBRA-EDU-PUNA',
+                        category: 'Entregadas | Logística Puna',
+                        title: 'Programa PROMACE',
+                        location: 'Susques / Miyuyoc / Loma Blanca | Jujuy',
+                        description: 'Ejecución de escuelas rurales en condiciones climáticas extremas (-15°C). Logística de alta montaña para transporte y campamentos (+3.500 msnm). Diseño térmico riguroso con sistemas pasivos y muros trombe. Comitente: Gobierno de Jujuy / Min. Educación (Financiamiento CAF/BCIE).',
+                        specs: [
+                            { label: 'Envolvente', value: 'Muros Dobles c/ Aislación Reforzada', icon: 'home' },
+                            { label: 'Confort', value: 'Losa Radiante + Muros Trombe', icon: 'thermometer' },
+                            { label: 'Energía', value: 'Paneles Solares / Termotanques', icon: 'zap' },
+                            { label: 'Logística', value: 'Alta Montaña (>3.500 msnm)', icon: 'mountain' }
+                        ],
+                        gallery: [
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/Captura%20de%20pantalla%202023-10-06%20113442.png',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/Captura%20de%20pantalla%202023-09-27%20110430.png',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/Captura%20de%20pantalla%202023-09-27%20173615.png',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/Captura%20de%20pantalla%202023-10-06%20174700.png',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/IMG_20230228_110954539.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/IMG_20230921_105217996_HDR.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/IMG_20231011_111630141_HDR.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/IMG_20231011_125433989_HDR.jpg'
+                        ]
+                    },
+                    'apart': {
+                        id: 'OBRA-PRIV-HOTEL',
+                        category: 'Entregadas | Turismo',
+                        title: 'Apart Hotel "Los Perales"',
+                        location: 'Calle Atilio Palla 208, B° Los Perales, S.S. de Jujuy',
+                        description: 'Complejo hotelero de categoría Premium. Estructura independiente y terminaciones de alta gama con revestimiento tipo Tarquini y piedra natural. Gestión integral de instalaciones centralizadas VRV.',
+                        specs: [
+                            { label: 'Terminaciones', value: 'Porcelanato Pulido / DVH A30', icon: 'star' },
+                            { label: 'Climatización', value: 'Central VRV', icon: 'settings' },
+                            { label: 'Fachada', value: 'Piedra Natural + Texturado', icon: 'layer' },
+                            { label: 'Tipología', value: 'Hotel Boutique', icon: 'globe' }
+                        ],
+                        gallery: [
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/FEYC_AP_3.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/FEYC_AP_1.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/FEYC_AP_2.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/FEYC_AP_4.JPG',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/FEYC_AP_6.jpg'
+                        ]
+                    },
+                    'adep': {
+                        id: 'OBRA-SOC-35V',
+                        category: 'Entregadas | Vivienda',
+                        title: 'VIVIENDAS A.D.E.P.',
+                        location: 'Humahuaca (Zona Patrimonio)',
+                        description: 'Conjunto habitacional gremial (35 Unidades) adaptado a la normativa patrimonial de la Quebrada. Construcción tradicional racionalizada con losa alivianada y sobretecho de chapa para control pluvial.',
+                        specs: [
+                            { label: 'Estructura', value: 'Portante s/CIRSOC 103 (Sísmica)', icon: 'home' },
+                            { label: 'Cubierta', value: 'Losa + Chapa Prepintada', icon: 'layer' },
+                            { label: 'Sustentabilidad', value: 'Termotanques Solares', icon: 'sun' },
+                            { label: 'Cliente', value: 'Gremio Docente (ADEP)', icon: 'briefcase' }
+                        ],
+                        gallery: [
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/100_5893.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/000_0076.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/100_4975.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/100_5389.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/000_0069.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/100_3951.jpg'
+                        ]
+                    },
+                    'amperpag': {
+                        id: 'OBRA-SOC-AMP',
+                        category: 'Entregadas | Vivienda',
+                        title: 'Viviendas AMPERPAG',
+                        location: 'San Salvador de Jujuy',
+                        description: 'Urbanización de viviendas unifamiliares (Social Evolutiva). Ejecución sobre platea de fundación H-21. Gestión eficiente de recursos para cumplimiento estricto de plazos bajo modalidad Llave en Mano.',
+                        specs: [
+                            { label: 'Fundación', value: 'Platea H°A° H-21', icon: 'layer' },
+                            { label: 'Muros', value: 'Bloque Portante 18x19x33', icon: 'grid' },
+                            { label: 'Infraestructura', value: 'Redes, Veredas y Arbolado', icon: 'check' },
+                            { label: 'Superficie', value: '55m² a 62m²', icon: 'home' }
+                        ],
+                        gallery: [
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/FEYC_AMP_1.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/FEYC_AMP_3.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/FEYC_AMP_2.jpg'
+                        ]
+                    },
+                    'pucarita': {
+                        id: 'OBRA-EDU-PUCA',
+                        category: 'Entregadas | Educación',
+                        title: 'Jardín Maternal Pucarita',
+                        location: 'Escuela Primaria Nº 255 Pucarita, San Salvador De Jujuy',
+                        description: 'Edificio modelo para primera infancia (0-3 años). Diseño enfocado en seguridad (vidrios laminados, pisos antigolpes) y estimulación temprana. Sistema de calefacción por losa radiante para zona de gateo.',
+                        specs: [
+                            { label: 'Seguridad', value: 'Vidrios Laminados 3+3', icon: 'activity' },
+                            { label: 'Confort', value: 'Losa Radiante / Radiadores', icon: 'thermometer' },
+                            { label: 'Sanitarios', value: 'Escala Infantil Integrados', icon: 'droplet' },
+                            { label: 'Inauguración', value: 'Diciembre 2023', icon: 'check' }
+                        ],
+                        gallery: [
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/pucarita-entrada.jpg'
+                        ]
+                    },
+                    'ejesa': {
+                        id: 'SERV-CORP-EJESA',
+                        category: 'Corporativo | Energía',
+                        title: 'Cliente EJESA',
+                        location: 'Provincia de Jujuy',
+                        description: 'Consultoría técnica especializada. Relevamiento topográfico de alta precisión (Estación Total / GPS) y tasación técnica de activos bajo normas del Tribunal de Tasaciones de la Nación.',
+                        specs: [
+                            { label: 'Tecnología', value: 'Estación Total / GPS Diferencial', icon: 'settings' },
+                            { label: 'Normativa', value: 'Tribunal de Tasaciones (TTN)', icon: 'file-text' },
+                            { label: 'Alcance', value: 'Estaciones Transformadoras', icon: 'zap' },
+                            { label: 'Gestión', value: 'Saneamiento Dominial', icon: 'globe' }
+                        ],
+                        gallery: [
+                            'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=2070'
+                        ]
+                    },
+                    'infra': {
+                        id: 'SERV-INFRA-URB',
+                        category: 'Corporativo | Privados',
+                        title: 'Redes e Infraestructura',
+                        location: 'Privados',
+                        description: 'Ejecución de nexos de infraestructura para loteos. Redes de agua (PVC K10) y cloacales (Ø160mm) bajo inspección municipal. Apertura de calles y consolidación de base granular.',
+                        specs: [
+                            { label: 'Red Agua', value: 'PVC K10 Junta Elástica', icon: 'droplet' },
+                            { label: 'Red Cloaca', value: 'PVC Ø160mm Colectoras', icon: 'settings' },
+                            { label: 'Vialidad', value: 'Cordón Cuneta H-21', icon: 'truck' },
+                            { label: 'Gestión', value: 'Factibilidad Municipal', icon: 'check' }
+                        ],
+                        gallery: [
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/FEYC_RED_1.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/FEYC_RED_2.jpg',
+                            'https://raw.githubusercontent.com/forbice/fotos/0f126ff6fe13677b7c33f689a5b05d548ee8ff2f/FEYC_RED_3.JPG'
+                        ]
+                    }
+                },
+                
+                openProject(key) {
+                    if (this.projects[key]) {
+                        this.activeProject = this.projects[key];
+                        this.currentImg = 0; // <--- RESET: Siempre foto 1 al abrir
+                        this.projectOpen = true;
+                    }
+                },
+                closeProject() {
+                    this.projectOpen = false;
+                    setTimeout(() => { this.currentImg = 0; }, 300);
+                },
+                
+                // --- LÓGICA UNIFICADA: LIGHTBOX + ZOOM + CARRUSEL ---
+
+                openLightbox(imgUrl, gallery = null, index = 0) {
+                    this.activeImage = imgUrl;
+                    // Si recibimos galería la guardamos, sino creamos array de 1 foto
+                    this.lightboxGallery = gallery || [imgUrl];
+                    this.lightboxIndex = index;
+                    this.lightboxOpen = true;
+                    this.resetZoomState();
+                },
+
+                closeLightbox() {
+                    this.lightboxOpen = false;
+                    this.resetZoomState();
+                },
+
+                // Navegación Carrusel
+                nextLightboxImage() {
+                    if (this.lightboxGallery && this.lightboxGallery.length > 1) {
+                        this.lightboxIndex = (this.lightboxIndex + 1) % this.lightboxGallery.length;
+                        this.activeImage = this.lightboxGallery[this.lightboxIndex];
+                        this.resetZoomState();
+                    }
+                },
+                prevLightboxImage() {
+                    if (this.lightboxGallery && this.lightboxGallery.length > 1) {
+                        this.lightboxIndex = (this.lightboxIndex === 0) ? this.lightboxGallery.length - 1 : this.lightboxIndex - 1;
+                        this.activeImage = this.lightboxGallery[this.lightboxIndex];
+                        this.resetZoomState();
+                    }
+                },
+
+                // Zoom: Movimiento del mouse
+                handleMouseMove(e) {
+                    if (this.zoomLevel > 1) {
+                        // Accedemos a la imagen mediante ID directo para evitar conflictos de $refs
+                        const img = document.getElementById('zoomed-image');
+                        if (img) {
+                            const rect = img.getBoundingClientRect();
+                            let x = (e.clientX - rect.left) / rect.width;
+                            let y = (e.clientY - rect.top) / rect.height;
+                            x = Math.max(0, Math.min(1, x)); // Limitar bordes
+                            y = Math.max(0, Math.min(1, y));
+                            this.moveX = x * 100;
+                            this.moveY = y * 100;
+                        }
+                    }
+                },
+
+                // Zoom: Rueda del mouse (Scroll)
+                handleWheel(e) {
+                    if (!this.lightboxOpen) return;
+                    
+                    const direction = e.deltaY > 0 ? -1 : 1;
+                    const step = 0.5;
+                    let nextZoom = this.zoomLevel + (direction * step);
+                    
+                    // Límites de zoom
+                    if (nextZoom < 1) nextZoom = 1;
+                    if (nextZoom > 5) nextZoom = 5;
+                    
+                    this.zoomLevel = nextZoom;
+                    
+                    if (nextZoom > 1) {
+                        this.handleMouseMove(e); // Actualizar foco
+                    } else {
+                        this.resetZoomState();
+                    }
+                },
+
+                toggleZoom(e) {
+                    if (this.zoomLevel === 1) {
+                        this.zoomLevel = 2.5;
+                        this.$nextTick(() => this.handleMouseMove(e));
+                    } else {
+                        this.resetZoomState();
+                    }
+                },
+
+                resetZoomState() {
+                    this.zoomLevel = 1;
+                    this.moveX = 50;
+                    this.moveY = 50;
+                },
+
+                // Utilidades
+                handleScroll() { this.scrolled = window.pageYOffset > 50; },
+                scrollTo(id) { this.mobileMenuOpen = false; const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth' }); },
+                getIcon(name) { return this.icons[name] || ''; },
+                submitForm() { console.log('Form enviado'); }
+            }
+        }
+    </script>
+</body>
+</html>
