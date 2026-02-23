@@ -239,7 +239,7 @@
             </h1>
             
             <div class="flex flex-col md:flex-row items-center gap-8 mt-12 md:ml-2">
-                <p class="text-gray-300 text-lg max-w-lg font-light leading-relaxed text-center md:text-left border-l-2 border-forbice-red pl-6">
+                <p class="text-gray-300 text-sm md:text-lg max-w-[280px] md:max-w-lg font-light leading-relaxed text-left border-l-2 border-forbice-red pl-4 md:pl-6 mx-auto md:mx-0">
                     Donde la estructura potencia el diseño. 
                     Proyectamos desarrollos que trascienden la estética para garantizar solidez y calidad de vida real.
                 </p>
@@ -378,7 +378,7 @@
             <div class="container mx-auto px-6 py-24 max-w-4xl pr-8 md:pr-32">
                 
                 <div class="mb-20 border-b-2 border-black pb-12">
-                    <h2 class="text-5xl md:text-7xl font-display font-black text-forbice-black uppercase tracking-tighter mb-8">Trayectoria</h2>
+                    <h2 class="text-4xl md:text-7xl font-display font-black text-forbice-black uppercase tracking-tighter mb-6 md:mb-8">Trayectoria</h2>
                     <blockquote class="text-xl md:text-2xl text-gray-600 font-light italic border-l-4 border-forbice-red pl-6 py-2">
                         "Él fue el iniciador de este sueño [...] Siempre presente con sus enseñanzas y su trayectoria, puso todo su empeño en lograr la excelencia. Esperamos siempre estar a su altura."
                     </blockquote>
@@ -542,7 +542,7 @@
                         <div class="space-y-12 border-t border-gray-300 pt-10">
                             <div class="group"><h4 class="text-base font-bold text-forbice-black uppercase tracking-wide">Arq. Pablo Guillermo Forbice</h4><p class="text-xs text-forbice-red font-bold uppercase tracking-wider mb-3 mt-1">Socio Gerente | Arquitectura</p><p class="text-sm text-gray-600 leading-relaxed">Visión estratégica y desarrollo de negocios. Planificación arquitectónica y coordinación integral de equipos de trabajo.</p></div>
                             <div class="group"><h4 class="text-base font-bold text-forbice-black uppercase tracking-wide">Rolando Fabián Forbice</h4><p class="text-xs text-forbice-red font-bold uppercase tracking-wider mb-3 mt-1">Socio Gerente | Gerencia Operativa</p><p class="text-sm text-gray-600 leading-relaxed">Dirección de logística y recursos. Gestión administrativa y control de ejecución en obras de alta complejidad.</p></div>
-                            <div class="group"><h4 class="text-base font-bold text-forbice-black uppercase tracking-wide">Ing. Rodolfo Fabrizio Forbice</h4><p class="text-xs text-forbice-red font-bold uppercase tracking-wider mb-3 mt-1">Ingeniería Civil</p><p class="text-sm text-gray-600 leading-relaxed">Responsable de estructura sismorresistente e instalaciones complejas. Cálculo y solvencia técnica.</p></div>
+                            <div class="group"><h4 class="text-base font-bold text-forbice-black uppercase tracking-wide">Ing. Rodolfo Fernando Forbice</h4><p class="text-xs text-forbice-red font-bold uppercase tracking-wider mb-3 mt-1">Ingeniería Civil</p><p class="text-sm text-gray-600 leading-relaxed">Responsable de estructura sismorresistente e instalaciones complejas. Cálculo y solvencia técnica.</p></div>
                             <div class="group"><h4 class="text-base font-bold text-forbice-black uppercase tracking-wide">Abog. Fabrizio Forbice</h4><p class="text-xs text-forbice-red font-bold uppercase tracking-wider mb-3 mt-1">Asesoría Legal</p><p class="text-sm text-gray-600 leading-relaxed">Gestión contractual y vínculos con terceros. Seguridad jurídica y normativa.</p></div>
                         </div>
                         
@@ -649,20 +649,20 @@
                     <h2 class="text-6xl md:text-8xl font-display font-black text-forbice-black uppercase tracking-tighter">OBRAS</h2>
                 </div>
                 
-                <div class="flex space-x-8 mt-8 md:mt-0 overflow-x-auto pb-4 md:pb-0 w-full md:w-auto no-scrollbar scroll-pl-6 pr-6 md:pr-0">
-                    <button @click="tab = 'execution'" class="text-sm uppercase tracking-[0.2em] font-bold pb-4 transition-all relative whitespace-nowrap flex-shrink-0" :class="tab === 'execution' ? 'text-forbice-black opacity-100' : 'text-gray-400 opacity-60 hover:opacity-100'">
-                        En Ejecución
-                        <span x-show="tab === 'execution'" class="absolute bottom-0 left-0 w-full h-[3px] bg-forbice-red" x-transition.opacity></span>
-                    </button>
-                    <button @click="tab = 'history'" class="text-sm uppercase tracking-[0.2em] font-bold pb-4 transition-all relative whitespace-nowrap flex-shrink-0" :class="tab === 'history' ? 'text-forbice-black opacity-100' : 'text-gray-400 opacity-60 hover:opacity-100'">
-                        Entregadas
-                        <span x-show="tab === 'history'" class="absolute bottom-0 left-0 w-full h-[3px] bg-forbice-red" x-transition.opacity></span>
-                    </button>
-                    <button @click="tab = 'corporate'" class="text-sm uppercase tracking-[0.2em] font-bold pb-4 transition-all relative whitespace-nowrap flex-shrink-0" :class="tab === 'corporate' ? 'text-forbice-black opacity-100' : 'text-gray-400 opacity-60 hover:opacity-100'">
-                        Corporativas
-                        <span x-show="tab === 'corporate'" class="absolute bottom-0 left-0 w-full h-[3px] bg-forbice-red" x-transition.opacity></span>
-                    </button>
-                </div>
+                <div class="flex space-x-4 md:space-x-8 mt-8 md:mt-0 overflow-x-auto pb-4 md:pb-0 w-full md:w-auto no-scrollbar justify-between md:justify-start">
+    			<button @click="tab = 'execution'" class="text-[11px] md:text-sm uppercase tracking-[0.15em] md:tracking-[0.2em] font-bold pb-4 transition-all relative whitespace-nowrap flex-shrink-0" :class="tab === 'execution' ? 'text-forbice-black opacity-100' : 'text-gray-400 opacity-60 hover:opacity-100'">
+        		En Ejecución
+        		<span x-show="tab === 'execution'" class="absolute bottom-0 left-0 w-full h-[3px] bg-forbice-red" x-transition.opacity></span>
+    			</button>
+    			<button @click="tab = 'history'" class="text-[11px] md:text-sm uppercase tracking-[0.15em] md:tracking-[0.2em] font-bold pb-4 transition-all relative whitespace-nowrap flex-shrink-0" :class="tab === 'history' ? 'text-forbice-black opacity-100' : 'text-gray-400 opacity-60 hover:opacity-100'">
+        		Entregadas
+        		<span x-show="tab === 'history'" class="absolute bottom-0 left-0 w-full h-[3px] bg-forbice-red" x-transition.opacity></span>
+    			</button>
+    			<button @click="tab = 'corporate'" class="text-[11px] md:text-sm uppercase tracking-[0.15em] md:tracking-[0.2em] font-bold pb-4 transition-all relative whitespace-nowrap flex-shrink-0" :class="tab === 'corporate' ? 'text-forbice-black opacity-100' : 'text-gray-400 opacity-60 hover:opacity-100'">
+        		Corporativas
+        		<span x-show="tab === 'corporate'" class="absolute bottom-0 left-0 w-full h-[3px] bg-forbice-red" x-transition.opacity></span>
+    			</button>
+		</div>
             </div>
 
             <div x-show="tab === 'execution'" class="animate-fade-in">
@@ -1071,7 +1071,7 @@
     </section>
 
     <footer class="bg-white border-t border-gray-200 py-12 text-center">
-        <p class="text-gray-400 text-xs font-bold tracking-widest uppercase">
+        <p class="text-gray-400 text-[10px] md:text-xs font-bold tracking-widest uppercase px-6">
             &copy; 2025 Forbice Estudios y Construcciones S.R.L.
         </p>
     </footer>
